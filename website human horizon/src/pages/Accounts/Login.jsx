@@ -64,14 +64,8 @@ const Login = () => {
       data: formfield,
     })
       .then((response) => {
-        localStorage.setItem(
-          "operaPublicationAccessToken",
-          response.data.access,
-        );
-        localStorage.setItem(
-          "operaPublicationRefreshToken",
-          response.data.refresh,
-        );
+        localStorage.setItem("humanhorizonAccessToken", response.data.access);
+        localStorage.setItem("humanhorizonRefreshToken", response.data.refresh);
         navigate("/");
         window.location.reload(false);
       })

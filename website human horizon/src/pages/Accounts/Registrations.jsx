@@ -32,9 +32,13 @@ const schema = yup.object().shape({
   phone: yup.string().required("Phone is a required field!"),
   eemmaaiill: yup.string().required("Email is a required field!"),
   password: yup.string().required("Password is a required field!"),
+  // confirm_password: yup
+  //   .string()
+  //   .required("Confirm Password is a required field!"),
   confirm_password: yup
     .string()
-    .required("Confirm Password is a required field!"),
+    .required("Confirm Password is a required field!")
+    .oneOf([yup.ref("password")], "Passwords do not match!"),
 });
 
 const validate = (values) => {
@@ -109,17 +113,15 @@ const Registrations = () => {
         navigate("/login");
       })
       .catch((error) => {
-        console.log(error);
-        // setMessage(error.response.data.email);
+        console.error(
+          "Registration failed:",
+          error.response?.data || error.message,
+        );
+
         setMessage(
-          error.response.data.email ||
-            error.response.data.phone ||
-            error.response.data.eemmaaiill ||
-            error.response.data.password ||
-            error.response.data.confirm_password ||
-            error.response.data.non_field_errors ||
-            error.message,
-          "Error",
+          error.response?.data?.email ||
+            error.response?.data?.detail ||
+            "Registration failed. Please try again.",
         );
       });
   };
@@ -196,6 +198,30 @@ const Registrations = () => {
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.email}
+                        </Form.Control.Feedback>
+                      </InputGroup>
+                    </Form.Group>
+                  </div>
+
+                  <div className="col-lg-12">
+                    {/* Customer Name */}
+                    <Form.Group className="form-group mb-3 ">
+                      <Form.Label>
+                        Customer Name<span className="text-danger">*</span>
+                      </Form.Label>
+                      <InputGroup hasValidation>
+                        <Form.Control
+                          type="text"
+                          name="name"
+                          id="name"
+                          value={values.name}
+                          onChange={handleChange}
+                          isInvalid={!!touched.name && !!errors.name}
+                          isValid={touched.name && !errors.name}
+                          className="form-control my-0"
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.name}
                         </Form.Control.Feedback>
                       </InputGroup>
                     </Form.Group>
@@ -405,7 +431,7 @@ const Registrations = () => {
                         className="password-input-group"
                       >
                         <Form.Control
-                          type={showPassword1 ? "text" : "confirm_password"}
+                          type={showPassword1 ? "text" : "password"}
                           name="confirm_password"
                           id="confirm_password"
                           value={values.confirm_password}
@@ -532,6 +558,7 @@ const Wrapper = styled.section`
       font-size: 26px;
     }
   }
+  
   /* ===== Password icon ===== */
   .password-input-group {
     position: relative;

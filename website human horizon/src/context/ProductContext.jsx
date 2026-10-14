@@ -254,6 +254,7 @@ const ProductContext = ({ children }) => {
         fetchOrder,
 
         fetchAllUsers,
+        fetchCurrentUser,
       }}
     >
       {children}

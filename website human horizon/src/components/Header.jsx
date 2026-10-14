@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import styled from "styled-components";
 import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 import {
@@ -13,8 +13,6 @@ import {
   FaUserCircle,
   FaIdCard,
   FaKey,
-  FaCog,
-  FaUserPlus,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { useCartContext } from "../context/CartContext";
@@ -44,6 +42,7 @@ const Header = ({ aT, c_user, handleLogout }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const userMenuRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleMenuClick = () => {
     setMenuOpen(false);
@@ -232,67 +231,74 @@ const Header = ({ aT, c_user, handleLogout }) => {
               </li>
 
               {/* ====== LOGIN / USER MENU ====== */}
-              <li className="user-menu-wrapper" ref={userMenuRef}>
-                <button
-                  type="button"
-                  className="login user-login-button"
-                  onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                  aria-label="User menu"
-                  aria-expanded={isUserMenuOpen}
-                >
-                  <FaUser size={16} />
-                </button>
-
-                {/* USER DROPDOWN */}
-                <div
-                  className={`user-dropdown ${
-                    isUserMenuOpen ? "user-dropdown-active" : ""
-                  }`}
-                >
-                  <Link to="/account" onClick={() => setIsUserMenuOpen(false)}>
-                    <FaUserCircle />
-                    <span>Welcome Rony71!</span>
-                  </Link>
-
-                  <Link to="/profile" onClick={() => setIsUserMenuOpen(false)}>
-                    <FaIdCard />
-                    <span>Profile</span>
-                  </Link>
-
-                  <Link
-                    to="/change-password"
-                    onClick={() => setIsUserMenuOpen(false)}
-                  >
-                    <FaKey />
-                    <span>Change Password</span>
-                  </Link>
-
-                  <Link to="/settings" onClick={() => setIsUserMenuOpen(false)}>
-                    <FaCog />
-                    <span>Settings</span>
-                  </Link>
-
-                  <Link
-                    to="/registration"
-                    onClick={() => setIsUserMenuOpen(false)}
-                  >
-                    <FaUserPlus />
-                    <span>Registration</span>
-                  </Link>
-
+              {aT ? (
+                <li className="user-menu-wrapper" ref={userMenuRef}>
                   <button
                     type="button"
-                    className="user-dropdown-logout"
-                    onClick={() => {
-                      setIsUserMenuOpen(false);
-                      console.log("Logout");
-                    }}
+                    className="login user-login-button"
+                    onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                    aria-label="User menu"
+                    aria-expanded={isUserMenuOpen}
                   >
-                    <FaSignOutAlt />
-                    <span>Logout</span>
+                    <FaUser size={16} />
                   </button>
-                </div>
-              </li>
+
+                  <div
+                    className={`user-dropdown px-2 ${
+                      isUserMenuOpen ? "user-dropdown-active" : ""
+                    }`}
+                  >
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <FaUserCircle />
+                      <span>Welcome {c_user || "User"}!</span>
+                    </Link>
+
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <FaIdCard />
+                      <span>Profile</span>
+                    </Link>
+
+                    <Link
+                      to="/change-password"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <FaKey />
+                      <span>Change Password</span>
+                    </Link>
+
+                    <button
+                      type="button"
+                      className="user-dropdown-logout"
+                      // onClick={async () => {
+                      //   setIsUserMenuOpen(false);
+                      //   await handleLogout();
+                      // }}
+                      onClick={() => {
+                        handleLogout();
+                        navigate("/");
+                      }}
+                    >
+                      <FaSignOutAlt />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                </li>
+              ) : (
+                <li className="login-action">
+                  <Link to="/login" className="login-button">
+                    <span className="login-button-icon">
+                      <FaUser />
+                    </span>
+                    <span>Login</span>
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </nav>
@@ -471,7 +477,7 @@ const Header = ({ aT, c_user, handleLogout }) => {
 };
 
 const Wrapper = styled.section`
-  /* ====== HEADER ====== */
+  /* ===== HEADER ===== */
   .fixed-header {
     position: fixed;
     top: 0;
@@ -486,411 +492,230 @@ const Wrapper = styled.section`
     padding: 0;
   }
 
-  /* Navigation links */
+  .navbar-brand img {
+    display: block;
+    object-fit: contain;
+  }
+
+  /* ===== NAVIGATION ===== */
   .navbar-nav > li > a {
     color: #696969;
     transition: color 0.2s ease-in-out;
   }
 
   .navbar-nav > li > a:hover {
-    color: #000;
+    color: #dc3545;
   }
 
   .navbar-nav > li > a.active {
-    color: #000 !important;
+    color: #dc3545 !important;
     font-weight: 700 !important;
   }
 
+  /* ===== SOCIAL ICONS ===== */
   header.center-menu .social-icons li {
-    margin: 0 0px;
+    margin: 0 !important;
   }
+
   .social-icons {
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    gap: 10px !important;
+    margin: 0;
+    padding: 0;
   }
 
   .social-icons > li {
-    list-style: none;
-  }
-
-  .social-icons a,
-  .cart-button {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    list-style: none;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .social-icons a {
+    width: 34px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
     color: #696969;
     background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    text-decoration: none !important;
+    transition: all 0.25s ease;
   }
 
-  .social-icons a:hover,
-  .cart-button:hover {
-    color: #000;
-    background: #f5f5f5;
+  .social-icons a:hover {
+    color: #dc3545;
+    background: #fff1f2;
   }
 
-  .cart-button {
-    font-family: inherit;
-  }
-  /* ==== */
-  .wishlist,
-  .cart-button {
+  /* ===== WISHLIST ===== */
+  .wishlist {
     position: relative;
   }
 
+  .social-icons .wishlist {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #e2e5e9;
+    background: #fff;
+    border-radius: 8px;
+  }
+
+  .social-icons .wishlist:hover {
+    color: #dc3545;
+    border-color: #dc3545;
+    background: #fff5f5;
+  }
+
+  /* ===== CART BUTTON ===== */
+  .social-icons .cart-button {
+    position: relative;
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid #e2e5e9;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .social-icons .cart-button:hover {
+    color: #dc3545;
+    border-color: #dc3545;
+    background: #fff5f5;
+    transform: translateY(-1px);
+  }
+
+  /* ===== COUNT BADGE ===== */
   .count-badge {
     position: absolute;
-    top: -9px;
-    right: -10px;
+    top: -7px;
+    right: -7px;
     min-width: 17px;
     height: 17px;
     padding: 0 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ff3333;
+    box-sizing: border-box;
+    border: 2px solid #fff;
+    border-radius: 20px;
+    background: #dc3545;
     color: #fff;
     font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* ===== LOGIN ACTION ===== */
+  .social-icons .login-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .social-icons .login-action .login-button {
+    height: 38px;
+    min-width: 90px;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 0 15px !important;
+    border: 1px solid #dc3545;
+    border-radius: 8px;
+    background: #dc3545;
+    color: #fff !important;
+    font-size: 13px;
     font-weight: 600;
     line-height: 1;
-    border-radius: 50%;
-  }
-
-  .cart-button {
-    border: none;
-    background: transparent;
-    padding: 0;
-    cursor: pointer;
-  }
-
-  /* ====== CART OVERLAY ====== */
-  .cart-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    z-index: 10000;
-  }
-
-  /* ====== CART PREVIEW ====== */
-  .cart-preview {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 480px;
-    max-width: 100%;
-    height: 100vh;
-    background: #fff;
-    z-index: 10001;
-    display: flex;
-    flex-direction: column;
-    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.18);
-    animation: cartSlideIn 0.3s ease forwards;
-  }
-
-  @keyframes cartSlideIn {
-    from {
-      transform: translateX(100%);
-    }
-
-    to {
-      transform: translateX(0);
-    }
-  }
-
-  /* ====== CART HEADER ====== */
-  .cart-header {
-    padding: 17px 12px 10px 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .cart-header h3 {
-    margin: 0;
-    font-size: 17px;
-    font-weight: 700;
-    color: #222;
-  }
-
-  .cart-close {
-    width: 35px;
-    height: 35px;
-    border: none;
-    background: transparent;
-    color: #222;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: 50%;
-  }
-
-  .cart-close:hover {
-    background: #f3f3f3;
-  }
-
-  /* ====== DETAILED CART ====== */
-  .detailed-cart-link {
-    margin: 0 12px;
-    color: #333;
-    font-size: 13px;
-    text-decoration: underline !important;
-    width: fit-content;
-  }
-
-  .detailed-cart-link:hover {
-    color: #000;
-  }
-
-  /* ====== CART ITEM ====== */
-  .cart-item {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 12px;
-  }
-
-  /* Product Image */
-  .cart-item-image {
-    width: 101px;
-    height: 101px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #f4f4f4;
-  }
-
-  .cart-item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  /* Product Information */
-  .cart-item-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .cart-item-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  .cart-item-top h4 {
-    margin: 2px 0 5px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #333;
-  }
-
-  .cart-item-top p {
-    margin: 0;
-    font-size: 14px;
-    color: #555;
-  }
-
-  .cart-item-top strong {
-    font-size: 14px;
-    color: #222;
+    text-decoration: none !important;
     white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.15);
+    transition: all 0.25s ease;
   }
 
-  /* ====== LICENSE + REMOVE ROW ====== */
-  .cart-item-actions {
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 4px;
+  .social-icons .login-action .login-button svg {
+    flex-shrink: 0;
   }
 
-  /* ====== LICENSE ====== */
-  .license-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  .social-icons .login-action .login-button:hover {
+    background: #bb2d3b;
+    border-color: #bb2d3b;
+    color: #fff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);
   }
 
-  .license-section label {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 5px;
-    color: #333;
+  .social-icons .login-action .login-button:active {
+    transform: translateY(0);
   }
 
-  .license-section select {
-    width: 172px;
-    height: 42px;
-    padding: 0 10px;
-    border: 1px solid #999;
-    border-radius: 7px;
-    background: #fff;
-    font-size: 14px;
-    color: #222;
-    outline: none;
-  }
-
-  .license-section select:focus {
-    border-color: #222;
-  }
-
-  /* ====== REMOVE BUTTON ====== */
-  .remove-item {
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    padding: 0 14px;
-    color: #222;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .remove-item:hover {
-    background: #f5f5f5;
-    border-color: #999;
-  }
-
-  /* ====== EMPTY SPACE ====== */
-  .cart-space {
-    flex: 1;
-    min-height: 30px;
-  }
-
-  /* ====== CART FOOTER ====== */
-  .cart-footer {
-    padding: 0 12px 12px;
-  }
-  .subtotal {
-    border-top: 1px solid #ddd;
-    padding: 14px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    color: #222;
-  }
-  .subtotal small {
-    font-size: 13px;
-  }
-  .subtotal strong {
-    font-size: 15px;
-  }
-
-  /* ====== CHECKOUT BUTTON ====== */
-  .checkout-button {
-    width: 100%;
-    height: 41px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #111;
-    color: #fff;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    margin-bottom: 7px;
-    transition: background 0.2s ease;
-  }
-
-  .checkout-button:hover {
-    background: #333;
-    color: #fff;
-  }
-
-  /* ====== REVIEW ORDER BUTTON ====== */
-  .review-button {
-    width: 100%;
-    height: 41px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    color: #222;
-    border: 1px solid #d0d0d0;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-
-  .review-button:hover {
-    background: #f5f5f5;
-    color: #111;
-  }
-
-  /* ====== RESPONSIVE ====== */
-  @media (max-width: 575px) {
-    .cart-preview {
-      width: 100%;
-    }
-
-    .cart-item-image {
-      width: 90px;
-      height: 90px;
-    }
-
-    .remove-item {
-      top: 132px;
-    }
-  }
-
-  /* ====== USER LOGIN / DROPDOWN ====== */
+  /* ===== LOGGED-IN USER BUTTON ===== */
   .user-menu-wrapper {
     position: relative;
-    list-style: none;
-  }
-
-  .user-login-button {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
     display: flex;
     align-items: center;
+    list-style: none;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .user-menu-wrapper .user-login-button {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    color: #696969;
-    background: transparent;
-    border: none;
-    padding: 0;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid #e2e5e9;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
   }
 
-  .user-login-button:hover {
-    color: #000;
-    background: #f5f5f5;
+  .user-menu-wrapper .user-login-button:hover {
+    color: #dc3545;
+    border-color: #dc3545;
+    background: #fff5f5;
+    transform: translateY(-1px);
   }
 
-  /* ====== USER DROPDOWN ====== */
+  /* ===== USER DROPDOWN ===== */
   .user-dropdown {
     position: absolute;
     top: calc(100% + 12px);
     right: 0;
-    width: 220px;
-    background: #fff;
-    border: 1px solid #e6e6e6;
-    border-radius: 8px;
+    width: 230px;
     padding: 7px 0;
     margin: 0;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -909,13 +734,21 @@ const Wrapper = styled.section`
     transform: translateY(0);
   }
 
-  .user-dropdown a:hover {
-    background: none !important;
+  .user-dropdown::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 12px;
+    width: 11px;
+    height: 11px;
+    background: #fff;
+    border-left: 1px solid #e6e6e6;
+    border-top: 1px solid #e6e6e6;
+    transform: rotate(45deg);
   }
 
-  /* Dropdown items */
   .user-dropdown a,
-  .user-dropdown-logout {
+  .user-dropdown .user-dropdown-logout {
     width: 100% !important;
     min-height: 42px;
     display: flex !important;
@@ -923,36 +756,33 @@ const Wrapper = styled.section`
     align-items: center !important;
     justify-content: flex-start !important;
     gap: 11px;
-    padding: 9px 15px !important;
-    margin: 0 !important;
     box-sizing: border-box;
-    color: #444 !important;
-    /* background: transparent; */
+    /* padding: 10px 15px !important; */
+    margin: 0 !important;
     border: none;
+    background: transparent;
+    color: #444 !important;
+    font-family: inherit;
     font-size: 13px;
     font-weight: 400;
     line-height: 1.4;
     text-align: left !important;
     text-decoration: none !important;
     cursor: pointer;
+    transition: all 0.2s ease;
   }
 
-  /* Icons */
   .user-dropdown a svg,
-  .user-dropdown-logout svg {
+  .user-dropdown .user-dropdown-logout svg {
     width: 15px !important;
     height: 15px !important;
     min-width: 15px;
     flex-shrink: 0;
     display: block;
   }
-  header.center-menu .social-icons li a {
-    padding: 0 10px 0 10px !important;
-  }
 
-  /* Text */
   .user-dropdown a span,
-  .user-dropdown-logout span {
+  .user-dropdown .user-dropdown-logout span {
     flex: 1;
     display: block;
     margin: 0;
@@ -960,33 +790,388 @@ const Wrapper = styled.section`
     text-align: left;
   }
 
-  /* Hover */
   .user-dropdown a:hover,
-  .user-dropdown-logout:hover {
-    color: #000 !important;
-    background: #f5f5f5;
+  .user-dropdown .user-dropdown-logout:hover {
+    color: #dc3545 !important;
+    background: #fff5f5 !important;
   }
 
-  /* Logout */
-  .user-dropdown-logout {
+  .user-dropdown .user-dropdown-logout {
     border-top: 1px solid #eeeeee !important;
     margin-top: 5px !important;
     padding-top: 12px !important;
     padding-bottom: 12px !important;
   }
 
-  /* Dropdown arrow */
-  .user-dropdown::before {
-    content: "";
-    position: absolute;
-    top: -6px;
-    right: 11px;
-    width: 11px;
-    height: 11px;
+  /* ===== CART OVERLAY ===== */
+  .cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 10000;
+  }
+
+  /* ===== CART PREVIEW ===== */
+  .cart-preview {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 480px;
+    max-width: 100%;
+    height: 100vh;
+    height: 100dvh;
     background: #fff;
-    border-left: 1px solid #e6e6e6;
-    border-top: 1px solid #e6e6e6;
-    transform: rotate(45deg);
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.18);
+    animation: cartSlideIn 0.3s ease forwards;
+  }
+
+  @keyframes cartSlideIn {
+    from {
+      transform: translateX(100%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* ===== CART HEADER ===== */
+  .cart-header {
+    padding: 17px 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cart-header h3 {
+    margin: 0;
+    color: #222;
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .cart-close {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #222;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .cart-close:hover {
+    background: #f3f3f3;
+    color: #dc3545;
+  }
+
+  /* ===== DETAILED CART LINK ===== */
+  .detailed-cart-link {
+    width: fit-content;
+    margin: 0 16px 10px;
+    color: #333;
+    font-size: 13px;
+    text-decoration: underline !important;
+  }
+
+  .detailed-cart-link:hover {
+    color: #dc3545;
+  }
+
+  /* ===== CART ITEM ===== */
+  .cart-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .cart-item-image {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 9px;
+    background: #f4f4f4;
+  }
+
+  .cart-item-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .cart-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cart-item-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .cart-item-top h4 {
+    margin: 2px 0 5px;
+    color: #333;
+    font-size: 15px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .cart-item-top p {
+    margin: 0 0 3px;
+    color: #777;
+    font-size: 13px;
+  }
+
+  .cart-item-top strong {
+    color: #222;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  /* ===== LICENSE + REMOVE ===== */
+  .cart-item-actions {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 5px;
+  }
+
+  .license-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .license-section label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .license-section select {
+    width: 172px;
+    max-width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #d8d8d8;
+    border-radius: 7px;
+    background: #fff;
+    color: #222;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .license-section select:focus {
+    border-color: #dc3545;
+  }
+
+  .remove-item {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 7px;
+    background: #fff;
+    color: #555;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .remove-item:hover {
+    border-color: #dc3545;
+    background: #fff5f5;
+    color: #dc3545;
+  }
+
+  /* ===== EMPTY CART SPACE ===== */
+  .cart-space {
+    flex: 1;
+    min-height: 20px;
+  }
+
+  /* ===== CART FOOTER ===== */
+  .cart-footer {
+    padding: 0 16px 16px;
+    background: #fff;
+  }
+
+  .subtotal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 0;
+    border-top: 1px solid #e5e5e5;
+    color: #222;
+    font-size: 14px;
+  }
+
+  .subtotal small {
+    color: #777;
+    font-size: 12px;
+  }
+
+  .subtotal strong {
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* ===== CHECKOUT BUTTON ===== */
+  .checkout-button {
+    width: 100%;
+    min-height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+    border: 1px solid #dc3545;
+    border-radius: 7px;
+    background: #dc3545;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .checkout-button:hover {
+    border-color: #bb2d3b;
+    background: #bb2d3b;
+    color: #fff;
+  }
+
+  .checkout-button.disabled,
+  .review-button.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* ===== REVIEW ORDER BUTTON ===== */
+  .review-button {
+    width: 100%;
+    min-height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #dedede;
+    border-radius: 7px;
+    background: #fff;
+    color: #222;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .review-button:hover {
+    border-color: #dc3545;
+    background: #fff5f5;
+    color: #dc3545;
+  }
+
+  /* ===== ACCESSIBILITY ===== */
+  .cart-button:focus-visible,
+  .user-login-button:focus-visible,
+  .login-button:focus-visible,
+  .cart-close:focus-visible,
+  .remove-item:focus-visible {
+    outline: 3px solid rgba(220, 53, 69, 0.25);
+    outline-offset: 3px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 991px) {
+    .social-icons {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px !important;
+      padding: 10px 0;
+    }
+  }
+
+  @media (max-width: 575px) {
+    .cart-preview {
+      width: 100%;
+    }
+
+    .cart-item {
+      padding: 12px;
+      gap: 8px;
+    }
+
+    .cart-item-image {
+      width: 85px;
+      height: 85px;
+    }
+
+    .cart-item-actions {
+      gap: 8px;
+    }
+
+    .license-section select {
+      width: 145px;
+    }
+
+    .remove-item {
+      padding: 0 9px;
+    }
+
+    .cart-footer {
+      padding: 0 12px 12px;
+    }
+
+    .social-icons {
+      gap: 8px !important;
+    }
+
+    .social-icons .cart-button,
+    .social-icons .wishlist,
+    .user-menu-wrapper .user-login-button {
+      width: 36px;
+      min-width: 36px;
+      height: 36px;
+    }
+
+    .social-icons .login-action .login-button {
+      min-width: 82px;
+      height: 36px;
+      padding: 0 12px !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 `;
 
