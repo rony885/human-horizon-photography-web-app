@@ -332,7 +332,7 @@ const Registrations = () => {
 
                   <div className="col-lg-6">
                     {/* Email */}
-                    <Form.Group className="form-outline">
+                    <Form.Group className="form-outline mb-3">
                       <Form.Label>
                         Email
                         <span className="text-danger">*</span>
@@ -359,7 +359,7 @@ const Registrations = () => {
                   </div>
                   <div className="col-lg-6">
                     {/* Phone */}
-                    <Form.Group className="form-outline">
+                    <Form.Group className="form-outline mb-3">
                       <Form.Label>
                         Phone
                         <span className="text-danger">*</span>

@@ -29,12 +29,6 @@ from rest_framework.decorators import api_view
 from .email_utils import send_otp_email
 
 
-from django.db import transaction
-
-
-
-
-
 
 def authenticate_user(email=None, password=None):
     try:
@@ -63,6 +57,7 @@ class AllowUnauthenticatedForLogout(BasePermission):
         return False
 
 
+# ==== CurrentUserAPIView ====
 class CurrentUserAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -71,6 +66,7 @@ class CurrentUserAPIView(APIView):
         return Response(serializer.data)
 
 
+# ==== UserRegisterAPIView ====
 class UserRegisterAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -82,22 +78,45 @@ class UserRegisterAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# ==== UserLoginAPIView ====
+# class UserLoginAPIView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def post(self, request):
+#         serializer = UserLoginSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+
+#         user = serializer.validated_data["user"]
+#         refresh = RefreshToken.for_user(user)
+
+#         return Response({
+#             "refresh": str(refresh),
+#             "access": str(refresh.access_token),
+#         })
+
 class UserLoginAPIView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = UserLoginSerializer(data=request.data)
+        serializer = UserLoginSerializer(
+            data=request.data,
+            context={"request": request},
+        )
         serializer.is_valid(raise_exception=True)
 
         user = serializer.validated_data["user"]
         refresh = RefreshToken.for_user(user)
 
-        return Response({
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-        })
+        return Response(
+            {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
+# ==== UserLogoutAPIView ====
 class UserLogoutAPIView(APIView):
     permission_classes = [IsAuthenticated, AllowUnauthenticatedForLogout]
 
@@ -117,7 +136,7 @@ class UserLogoutAPIView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# staff and superuser
+# ==== staff and superuser ====
 class StaffAndSuperuserLoginAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -184,6 +203,7 @@ class ChangePasswordAPIView(APIView):
             },
             status=status.HTTP_200_OK
         )
+
 
 # ==== Forgot Password — Send OTP ====
 class SendResetOTPAPIView(APIView):

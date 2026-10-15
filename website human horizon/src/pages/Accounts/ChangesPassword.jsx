@@ -54,7 +54,7 @@ const ChangesPassword = () => {
 
   const [message, setMessage] = useState();
   const navigate = useNavigate();
-  const aT = localStorage.getItem("operaPublicationAccessToken");
+  const aT = localStorage.getItem("humanhorizonAccessToken");
 
   // add
   const AddChangeFunc = async (values) => {

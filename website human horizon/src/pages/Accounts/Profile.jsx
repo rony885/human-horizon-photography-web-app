@@ -108,7 +108,8 @@ const Profile = ({ c_user }) => {
           </div>
 
           {/* Order History */}
-          <h3 className="section-title">Order History</h3>
+          {/* <h3 className="section-title">Order History</h3> */}
+          <h3 className="section-title">Image Download History</h3>
 
           <div className="order-table-wrapper">
             <table className="order-table">

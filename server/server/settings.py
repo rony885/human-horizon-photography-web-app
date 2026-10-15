@@ -11,12 +11,20 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+# import os
+# from pathlib import Path
+# from datetime import timedelta
+
+# # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -205,7 +213,7 @@ CACHES = {
 }
 
 # OTP Settings
-OTP_EXPIRY_SECONDS = 300 # 5 minutes
+# OTP_EXPIRY_SECONDS = 300 # 5 minutes
 
 # SMS Settings
 # SMS_API_URL = os.environ.get("SMS_API_URL", "")
@@ -213,17 +221,21 @@ OTP_EXPIRY_SECONDS = 300 # 5 minutes
 # SMS_SENDER_ID = os.environ.get("SMS_SENDER_ID", "")
 
 
-# Email configuration
+# Email Configuration
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_TIMEOUT = 30
 
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "").strip()
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "").replace(" ", "")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+OTP_EXPIRY_SECONDS = 300
 
 
 # Static files (CSS, JavaScript, Images)

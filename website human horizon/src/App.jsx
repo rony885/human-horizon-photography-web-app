@@ -28,6 +28,7 @@ import ForgotPassword from "./pages/Accounts/ForgotPassword";
 import Profile from "./pages/Accounts/Profile";
 
 import { useProductContext } from "./context/ProductContext";
+import ResetPassword from "./pages/Accounts/ResetPassword";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -125,6 +126,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/change-password" element={<ChangesPassword />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/profile" element={<Profile c_user={c_user} />} />
 
                 <Route path="*" element={<NotFound />} />

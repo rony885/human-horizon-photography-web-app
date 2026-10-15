@@ -1,8 +1,12 @@
 # serializers.py
+
 from rest_framework import serializers
+from django.db.models import Q
+from django.contrib.auth import authenticate
 from .models import CustomUser
 
 
+# ===== UserSerializer =====
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -23,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
-
+# ===== UserRegisterSerializer =====
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
@@ -106,38 +110,87 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return CustomUser.objects.create_user(**validated_data)
 
 
+# ===== UserLoginSerializer =====
+# class UserLoginSerializer(serializers.Serializer):
+#     email = serializers.CharField()
+#     password = serializers.CharField(
+#         write_only=True,
+#         trim_whitespace=False,
+#     )
+
+#     def validate(self, attrs):
+#         email = attrs["email"]
+#         password = attrs["password"]
+
+#         try:
+#             user = CustomUser.objects.get(email=email)
+#         except CustomUser.DoesNotExist:
+#             raise serializers.ValidationError({
+#                 "error": "Invalid email or password."
+#             })
+
+#         if not user.check_password(password):
+#             raise serializers.ValidationError({
+#                 "error": "Invalid email or password."
+#             })
+
+#         if not user.is_active:
+#             raise serializers.ValidationError({
+#                 "error": "This account is inactive."
+#             })
+
+#         attrs["user"] = user
+#         return attrs
+
 class UserLoginSerializer(serializers.Serializer):
-    email = serializers.CharField()
+    email = serializers.CharField(required=True)
     password = serializers.CharField(
+        required=True,
         write_only=True,
         trim_whitespace=False,
     )
 
     def validate(self, attrs):
-        email = attrs["email"]
+        identifier = attrs["email"].strip()
         password = attrs["password"]
 
-        try:
-            user = CustomUser.objects.get(email=email)
-        except CustomUser.DoesNotExist:
+        user = CustomUser.objects.filter(
+            Q(email__iexact=identifier)
+            | Q(eemmaaiill__iexact=identifier)
+        ).first()
+
+        if user is None:
             raise serializers.ValidationError({
-                "error": "Invalid email or password."
+                "non_field_errors": [
+                    "Invalid username/email or password."
+                ]
             })
 
-        if not user.check_password(password):
+        authenticated_user = authenticate(
+            request=self.context.get("request"),
+            username=user.email,
+            password=password,
+        )
+
+        if authenticated_user is None:
             raise serializers.ValidationError({
-                "error": "Invalid email or password."
+                "non_field_errors": [
+                    "Invalid username/email or password."
+                ]
             })
 
-        if not user.is_active:
+        if not authenticated_user.is_active:
             raise serializers.ValidationError({
-                "error": "This account is inactive."
+                "non_field_errors": [
+                    "This account is inactive."
+                ]
             })
 
-        attrs["user"] = user
+        attrs["user"] = authenticated_user
         return attrs
+    
 
-
+# ===== ChangePasswordSerializer =====
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(
         write_only=True,
@@ -171,6 +224,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         return attrs
 
 
+# ===== SendResetOTPSerializer =====
 class SendResetOTPSerializer(serializers.Serializer):
     eemmaaiill = serializers.EmailField()
 
@@ -188,6 +242,7 @@ class SendResetOTPSerializer(serializers.Serializer):
         return value
 
 
+# ===== ResetPasswordSerializer =====
 class ResetPasswordSerializer(serializers.Serializer):
     eemmaaiill = serializers.EmailField()
     otp = serializers.CharField(min_length=6, max_length=6)
