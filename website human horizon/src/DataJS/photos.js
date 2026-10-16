@@ -326,7 +326,7 @@ const photos = [
     yearId: 3,
 
     assetId: "2399915851",
-    uploadDate: "February 2, 2024",
+    uploadDate: "February 2, 2025",
 
     premium: true,
     premiumText: "Premium Content by Human & Horizon",
@@ -363,7 +363,7 @@ const photos = [
     yearId: 4,
 
     assetId: "2399915852",
-    uploadDate: "February 10, 2024",
+    uploadDate: "February 10, 2025",
 
     premium: true,
     premiumText: "Premium Content by Human & Horizon",
@@ -400,7 +400,7 @@ const photos = [
     yearId: 4,
 
     assetId: "2399915853",
-    uploadDate: "February 15, 2024",
+    uploadDate: "February 15, 2026",
 
     premium: true,
     premiumText: "Premium Content by Human & Horizon",
@@ -437,7 +437,7 @@ const photos = [
     yearId: 4,
 
     assetId: "2399915854",
-    uploadDate: "February 20, 2024",
+    uploadDate: "February 20, 2026",
 
     premium: true,
     premiumText: "Premium Content by Human & Horizon",
@@ -474,7 +474,7 @@ const photos = [
     yearId: 4,
 
     assetId: "2399915855",
-    uploadDate: "February 25, 2024",
+    uploadDate: "February 25, 2027",
 
     premium: true,
     premiumText: "Premium Content by Human & Horizon",
@@ -505,3 +505,4 @@ const photos = [
 ];
 
 export default photos;
+

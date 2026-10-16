@@ -366,11 +366,7 @@ const Header = ({ aT, c_user, handleLogout }) => {
                       <div className="license-section">
                         <label>License</label>
 
-                        {/* <select defaultValue="Standard">
-                          <option value="free">Free</option>
-                          <option value="standard">Standard</option>
-                          <option value="extended">Enhanced</option>
-                        </select> */}
+                       
                         <select
                           value={item.license}
                           onChange={(e) =>
@@ -379,7 +375,7 @@ const Header = ({ aT, c_user, handleLogout }) => {
                         >
                           <option value="standard">Standard</option>
                           <option value="enhanced">Enhanced</option>
-                          <option value="free">Free</option>
+                          {/* <option value="free">Free</option> */}
                         </select>
                       </div>
 

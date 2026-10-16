@@ -166,7 +166,7 @@ const ProductDetails = () => {
                   >
                     <option value="standard">Standard</option>
                     <option value="enhanced">Enhanced</option>
-                    <option value="enhanced">Free</option>
+                    {/* <option value="free">Free</option> */}
                   </select>
 
                   <h4 className="small fw-bold my-3">
@@ -203,6 +203,26 @@ const ProductDetails = () => {
                 <button
                   className="btn btn-danger w-100 mb-3"
                   type="button"
+                  // onClick={(e) => {
+                  //   e.preventDefault();
+
+                  //   if (!findProductDetails) return;
+
+                  //   if (isInCart) {
+                  //     const cartItem = cart.find(
+                  //       (item) =>
+                  //         Number(item.productId) ===
+                  //         Number(findProductDetails.id),
+                  //     );
+
+                  //     if (cartItem) {
+                  //       removeCart(cartItem.id);
+                  //     }
+                  //   } else {
+                  //     addToCart(findProductDetails.id, 1, findProductDetails);
+                  //   }
+                  // }}
+
                   onClick={(e) => {
                     e.preventDefault();
 
@@ -219,7 +239,13 @@ const ProductDetails = () => {
                         removeCart(cartItem.id);
                       }
                     } else {
-                      addToCart(findProductDetails.id, 1, findProductDetails);
+                      // Pass the selected license along with the product
+                      addToCart(
+                        findProductDetails.id,
+                        1,
+                        findProductDetails,
+                        selectedLicense,
+                      );
                     }
                   }}
                 >

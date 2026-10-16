@@ -1,39 +1,86 @@
 const CartReducer = (state, action) => {
   // ADD TO CART
+  // if (action.type === "ADD_TO_CART") {
+  //   const { product } = action.payload;
+
+  //   // const exist = state.cart.find(
+  //   //   (item) => Number(item.productId) === Number(product.id),
+  //   // );
+  //   const exist = state.cart.find((item) => item.id === product.id);
+
+  //   // Already in cart
+  //   if (exist) {
+  //     return state;
+  //   }
+
+  //   const cartProduct = {
+  //     id: product.id,
+  //     productId: product.id,
+  //     title: product.title,
+  //     image: product.image,
+
+  //     // IMPORTANT
+  //     assetId: product.assetId || "",
+
+  //     formats: product.formats || [],
+  //     amount: 1,
+
+  //     premium: product.premium || false,
+  //     premiumText: product.premiumText || "",
+
+  //     licenses: product.licenses || {},
+
+  //     license: "standard",
+  //     licenseName: product.licenses?.standard?.name || "Standard License",
+
+  //     price: Number(product.licenses?.standard?.price || 0),
+  //   };
+
+  //   return {
+  //     ...state,
+  //     cart: [...state.cart, cartProduct],
+  //   };
+  // }
+
+  // ADD TO CART
   if (action.type === "ADD_TO_CART") {
-    const { product } = action.payload;
+    const { product, license = "standard" } = action.payload;
 
-    // const exist = state.cart.find(
-    //   (item) => Number(item.productId) === Number(product.id),
-    // );
-    const exist = state.cart.find((item) => item.id === product.id);
+    // Check whether the product already exists in the cart
+    const exist = state.cart.find(
+      (item) => Number(item.productId) === Number(product.id),
+    );
 
-    // Already in cart
     if (exist) {
       return state;
     }
+
+    // Get the selected license details
+    const selectedLicense =
+      product.licenses?.[license] || product.licenses?.standard || {};
+
+    const selectedLicenseKey = product.licenses?.[license]
+      ? license
+      : "standard";
 
     const cartProduct = {
       id: product.id,
       productId: product.id,
       title: product.title,
       image: product.image,
-
-      // IMPORTANT
       assetId: product.assetId || "",
-
       formats: product.formats || [],
       amount: 1,
-
       premium: product.premium || false,
       premiumText: product.premiumText || "",
-
       licenses: product.licenses || {},
 
-      license: "standard",
-      licenseName: product.licenses?.standard?.name || "Standard License",
+      // Save the selected license
+      license: selectedLicenseKey,
+      licenseName: selectedLicense.name || "Standard License",
 
-      price: Number(product.licenses?.standard?.price || 0),
+      // Save the selected license price
+      price: Number(selectedLicense.price || 0),
     };
 
     return {
