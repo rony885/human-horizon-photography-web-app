@@ -5,7 +5,8 @@ import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import photosArray from "../../DataJS/photos.js";
+import { useProductContext } from "../../context/ProductContext.jsx";
+// import photosArray from "../../DataJS/photos.js";
 import categoriesArray from "../../DataJS/categories.js";
 import yearsArray from "../../DataJS/year.js";
 import { useCartContext } from "../../context/CartContext.jsx";
@@ -19,6 +20,9 @@ const Home = () => {
     removeWishlist,
     wishlist,
   } = useCartContext();
+
+  // data fetching
+  const { product, fetchProduct } = useProductContext();
 
   const galleryRef = useRef(null);
 
@@ -35,10 +39,15 @@ const Home = () => {
   );
 
   useEffect(() => {
-    setPhotos(photosArray);
+    // setPhotos(photosArray);
+    fetchProduct();
     setCategories(categoriesArray);
     setYears(yearsArray);
-  }, []);
+  }, [fetchProduct]);
+
+  useEffect(() => {
+    setPhotos(product);
+  }, [product]);
 
   useEffect(() => {
     localStorage.setItem("selectedCategory", selectedCategory);
@@ -46,6 +55,7 @@ const Home = () => {
   }, [selectedCategory, selectedYear]);
 
   const filteredPhotos = photos.filter((photo) => {
+  // const filteredPhotos = product.filter((photo) => {
     const categoryMatch =
       selectedCategory === "All" ||
       Number(photo.categoriesId) === Number(selectedCategory);

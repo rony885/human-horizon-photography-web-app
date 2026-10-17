@@ -38,24 +38,25 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
     descriptions:
       "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
@@ -78,24 +79,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -116,24 +120,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -172,6 +179,9 @@ const photos = [
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -192,24 +202,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -230,24 +243,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -268,24 +284,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -306,24 +325,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -344,24 +366,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -382,24 +407,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -420,24 +448,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -458,24 +489,27 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 
   {
@@ -496,26 +530,28 @@ const photos = [
       free: {
         name: "Free License",
         price: 0,
-        description:
+        licenses_description:
           "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
 
       standard: {
         name: "Standard License",
         price: 249,
-        description:
+        licenses_description:
           "Limited usage in print, advertising, and packaging. Unlimited web distribution.",
       },
 
       enhanced: {
         name: "Enhanced License",
         price: 349,
-        description:
+        licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
       },
     },
+
+    descriptions:
+      "Offset images aren't included in image subscriptions, FLEX subscriptions, unlimited downloads subscriptions or on-demand packs. You can license and pay for them separately.",
   },
 ];
 
 export default photos;
-

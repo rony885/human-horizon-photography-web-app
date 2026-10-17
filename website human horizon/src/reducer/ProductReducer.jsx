@@ -41,6 +41,22 @@ const ProductReducer = (state, action) => {
         isError: false,
       };
 
+    case "SET_API_YEAR":
+      return {
+        ...state,
+        isLoading: false,
+        year: action.payload,
+        isError: false,
+      };
+
+    case "SET_API_UNPAGINATE_YEAR":
+      return {
+        ...state,
+        isLoading: false,
+        unpaginate_year: action.payload,
+        isError: false,
+      };
+
     case "SET_API_PRODUCT":
       return {
         ...state,

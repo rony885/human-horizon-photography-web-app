@@ -180,7 +180,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "premiumText",
             "descriptions",
             "formats",
-            "licenses",
+            "license",
             "created_at",
             "updated_at",
         ]

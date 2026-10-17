@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router";
 import styled from "styled-components";
 
-import photosArray from "../../DataJS/photos.js";
+import { useProductContext } from "../../context/ProductContext.jsx";
+// import photosArray from "../../DataJS/photos.js";
 import categoriesArray from "../../DataJS/categories.js";
 // import yearsArray from "../../DataJS/year.js";
 import { useCartContext } from "../../context/CartContext.jsx";
@@ -12,10 +13,14 @@ const ProductDetails = () => {
     cart,
     addToCart,
     removeCart,
-    addToWishlist,
-    removeWishlist,
-    wishlist,
+    // addToWishlist,
+    // removeWishlist,
+    // wishlist,
   } = useCartContext();
+
+  // data fetching
+  const { product, fetchProduct } = useProductContext();
+
   const [photos, setPhotos] = useState([]);
   const [categories, setCategories] = useState([]);
   // const [years, setYears] = useState([]);
@@ -32,10 +37,15 @@ const ProductDetails = () => {
   console.log("From:", from);
 
   useEffect(() => {
-    setPhotos(photosArray);
+    // setPhotos(photosArray);
+    fetchProduct();
     setCategories(categoriesArray);
     // setYears(yearsArray);
-  }, []);
+  }, [fetchProduct]);
+
+  useEffect(() => {
+    setPhotos(product && product);
+  }, [product]);
 
   const findProductDetails = photos.find(
     (productItem) => productItem.id === parseInt(id),
@@ -101,8 +111,10 @@ const ProductDetails = () => {
                   <img
                     // src={imageUrl}
                     // src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=2000&auto=format&fit=crop"
-                    src={findProductDetails && findProductDetails.preview_image}
-                    alt="Young beauties picking flowers in the courtyard"
+                    // src={findProductDetails && findProductDetails.preview_image}
+                    // alt="Young beauties picking flowers in the courtyard"
+                    src={findProductDetails?.preview_image}
+                    alt={findProductDetails?.title || "Watermarked preview"}
                     className="w-100 h-100"
                     style={{
                       objectFit: "inherit",
@@ -315,8 +327,12 @@ const ProductDetails = () => {
 
           <img
             // src={imageUrl}
-            src={findProductDetails && findProductDetails.preview_image}
-            alt="Full preview"
+            // src={findProductDetails && findProductDetails.preview_image}
+            // alt="Full preview"
+            // className="img-fluid"
+            // onClick={(e) => e.stopPropagation()}
+            src={findProductDetails?.preview_image}
+            alt="Watermarked full preview"
             className="img-fluid"
             onClick={(e) => e.stopPropagation()}
           />

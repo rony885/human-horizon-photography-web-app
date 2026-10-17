@@ -137,13 +137,28 @@
 
 
 
+
+
+from io import BytesIO
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont, ImageOps
+
+from django.conf import settings
+from django.core.files.base import ContentFile
 from django.db import models
 from django.utils import timezone
+
 from .storage import private_storage
 
 
+# =========================================================
+# GENERATE UNIQUE PRODUCT ID
+# =========================================================
+
 def generate_product_id():
     prefix = "PROD-"
+
     last_product = (
         Product.objects
         .filter(product_id__startswith=prefix)
@@ -160,9 +175,14 @@ def generate_product_id():
     return f"{prefix}{next_number:05d}"
 
 
+# =========================================================
+# CATEGORY MODEL
+# =========================================================
+
 class Category(models.Model):
     status = models.BooleanField(default=True)
     name = models.CharField(max_length=255)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -174,9 +194,14 @@ class Category(models.Model):
         return self.name
 
 
+# =========================================================
+# YEAR MODEL
+# =========================================================
+
 class Year(models.Model):
     status = models.BooleanField(default=True)
     year = models.CharField(max_length=255)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -188,11 +213,23 @@ class Year(models.Model):
         return self.year
 
 
+# =========================================================
+# LICENSE MODEL
+# =========================================================
+
 class License(models.Model):
     status = models.BooleanField(default=True)
+
     name = models.CharField(max_length=255, unique=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+    )
+
     description = models.TextField()
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -202,9 +239,14 @@ class License(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
+# =========================================================
+# PRODUCT MODEL
+# =========================================================
 
 class Product(models.Model):
+
     product_id = models.CharField(
         max_length=25,
         unique=True,
@@ -213,8 +255,13 @@ class Product(models.Model):
     )
 
     status = models.BooleanField(default=True)
+
     name = models.CharField(max_length=255)
-    product_code = models.CharField(max_length=25, unique=True)
+
+    product_code = models.CharField(
+        max_length=25,
+        unique=True,
+    )
 
     category = models.ForeignKey(
         Category,
@@ -231,7 +278,7 @@ class Product(models.Model):
         null=True,
         related_name="products",
     )
-    
+
     license = models.ForeignKey(
         License,
         on_delete=models.SET_NULL,
@@ -240,26 +287,21 @@ class Product(models.Model):
         related_name="products",
     )
 
-    # Clean image for Gallery and Home.
+    # Clean thumbnail for the main product page.
     thumbnail_image = models.ImageField(
         upload_to="uploads/images/product/thumbnails/",
         blank=True,
         null=True,
     )
 
-    # Watermarked image for Product Details.
+    # Watermarked preview for the product details page.
     preview_image = models.ImageField(
         upload_to="uploads/images/product/previews/",
         blank=True,
         null=True,
     )
 
-    # Private original image; never expose its URL publicly.
-    # original_image = models.ImageField(
-    #     upload_to="products/originals/",
-    #     blank=True,
-    #     null=True,
-    # )
+    # Original image stored using private storage.
     original_image = models.ImageField(
         storage=private_storage,
         upload_to="products/originals/",
@@ -267,20 +309,26 @@ class Product(models.Model):
         null=True,
     )
 
-    upload_date = models.DateField(default=timezone.localdate)
+    upload_date = models.DateField(
+        default=timezone.localdate,
+    )
+
     premium = models.BooleanField(default=True)
+
     premium_text = models.CharField(
         max_length=255,
         default="Premium Content by Human & Horizon",
     )
 
-    # Keep your existing product information.
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(
+        blank=True,
+        null=True,
+    )
 
-
-    # Preserve the formats and license structures used by your React app.
-    formats = models.JSONField(default=list, blank=True)
-    # licenses = models.JSONField(default=dict, blank=True)
+    formats = models.JSONField(
+        default=list,
+        blank=True,
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -291,3 +339,215 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.product_id} - {self.name}"
+
+    # =====================================================
+    # GENERATE WATERMARK
+    # =====================================================
+
+    @staticmethod
+    def add_watermark(image):
+        width, height = image.size
+
+        overlay = Image.new(
+            "RGBA",
+            (width, height),
+            (0, 0, 0, 0),
+        )
+
+        draw = ImageDraw.Draw(overlay)
+
+        font_size = max(
+            22,
+            min(width, height) // 18,
+        )
+
+        font = None
+
+        font_paths = [
+            str(
+                Path(settings.BASE_DIR)
+                / "static"
+                / "fonts"
+                / "DejaVuSans.ttf"
+            ),
+            r"C:\Windows\Fonts\arial.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
+        ]
+
+        for font_path in font_paths:
+            try:
+                font = ImageFont.truetype(
+                    font_path,
+                    font_size,
+                )
+                break
+            except OSError:
+                continue
+
+        if font is None:
+            font = ImageFont.load_default()
+
+        text = "Human & Hurizon"
+
+        text_box = draw.textbbox(
+            (0, 0),
+            text,
+            font=font,
+            stroke_width=1,
+        )
+
+        text_width = text_box[2] - text_box[0]
+        text_height = text_box[3] - text_box[1]
+
+        spacing_x = max(text_width + 100, 200)
+        spacing_y = max(text_height + 100, 150)
+
+        # Repeat the watermark across the image.
+        for y in range(-height, height * 2, spacing_y):
+            for x in range(-width, width * 2, spacing_x):
+                draw.text(
+                    (x, y),
+                    text,
+                    font=font,
+                    fill=(255, 255, 255, 115),
+                    stroke_width=2,
+                    stroke_fill=(0, 0, 0, 100),
+                )
+
+        # Rotate the watermark pattern.
+        overlay = overlay.rotate(
+            30,
+            resample=Image.Resampling.BICUBIC,
+            expand=True,
+        )
+
+        # Crop the rotated overlay back to image dimensions.
+        left = (overlay.width - width) // 2
+        top = (overlay.height - height) // 2
+
+        overlay = overlay.crop(
+            (left, top, left + width, top + height)
+        )
+
+        # Apply the watermark to the preview only.
+        result = Image.alpha_composite(
+            image.convert("RGBA"),
+            overlay,
+        ).convert("RGB")
+
+        image.paste(result)
+
+    # =====================================================
+    # GENERATE CLEAN THUMBNAIL AND WATERMARKED PREVIEW
+    # =====================================================
+
+    def generate_preview_images(self):
+
+        if not self.original_image:
+            return
+
+        # Read the original from storage.
+        with self.original_image.open("rb") as source:
+            with Image.open(source) as opened_image:
+                opened_image.load()
+
+                clean_image = ImageOps.exif_transpose(
+                    opened_image
+                ).convert("RGB")
+
+        stem = Path(self.original_image.name).stem
+
+        # -------------------------------------------------
+        # 1. CLEAN THUMBNAIL
+        # -------------------------------------------------
+
+        thumbnail = clean_image.copy()
+
+        thumbnail.thumbnail(
+            (1000, 1000),
+            Image.Resampling.LANCZOS,
+        )
+
+        thumbnail_buffer = BytesIO()
+
+        thumbnail.save(
+            thumbnail_buffer,
+            format="JPEG",
+            quality=90,
+            optimize=True,
+        )
+
+        # -------------------------------------------------
+        # 2. WATERMARKED PREVIEW
+        # -------------------------------------------------
+
+        preview = clean_image.copy()
+
+        preview.thumbnail(
+            (1600, 1600),
+            Image.Resampling.LANCZOS,
+        )
+
+        self.add_watermark(preview)
+
+        preview_buffer = BytesIO()
+
+        preview.save(
+            preview_buffer,
+            format="JPEG",
+            quality=90,
+            optimize=True,
+        )
+
+        # -------------------------------------------------
+        # 3. SAVE GENERATED FILES
+        # -------------------------------------------------
+
+        self.thumbnail_image.save(
+            f"{stem}_thumbnail.jpg",
+            ContentFile(thumbnail_buffer.getvalue()),
+            save=False,
+        )
+
+        self.preview_image.save(
+            f"{stem}_preview.jpg",
+            ContentFile(preview_buffer.getvalue()),
+            save=False,
+        )
+
+        # Release image resources.
+        clean_image.close()
+        thumbnail.close()
+        preview.close()
+
+    # =====================================================
+    # AUTOMATIC SAVE
+    # =====================================================
+
+    def save(self, *args, **kwargs):
+
+        # Detect a newly uploaded original image.
+        generate_images = bool(
+            self.original_image
+            and not self.original_image._committed
+        )
+
+        # Save the product and original image first.
+        super().save(*args, **kwargs)
+
+        # Nothing else to generate if no new image was uploaded.
+        if not generate_images:
+            return
+
+        # Generate the clean thumbnail and watermarked preview.
+        self.generate_preview_images()
+
+        # Save only the generated image fields.
+        super().save(
+            update_fields=[
+                "thumbnail_image",
+                "preview_image",
+                "updated_at",
+            ]
+        )

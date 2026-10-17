@@ -23,6 +23,9 @@ const initialState = {
   category: [],
   unpaginate_category: [],
 
+  year: [],
+  unpaginate_year: [],
+
   product: [],
   unpaginate_product: [],
 
@@ -62,6 +65,9 @@ const ProductContext = ({ children }) => {
     // Product module
     category: `${process.env.REACT_APP_BASE_URL}/product_api/category/`,
     unpaginateCategory: `${process.env.REACT_APP_BASE_URL}/product_api/unpaginate_category/`,
+
+    year: `${process.env.REACT_APP_BASE_URL}/product_api/year/`,
+    unpaginateYear: `${process.env.REACT_APP_BASE_URL}/product_api/unpaginate_year/`,
 
     product: `${process.env.REACT_APP_BASE_URL}/product_api/product/`,
     unpaginateProduct: `${process.env.REACT_APP_BASE_URL}/product_api/unpaginate_product/`,
@@ -127,6 +133,16 @@ const ProductContext = ({ children }) => {
   const fetchUnpaginateCategory = useCallback(
     () => fetchData(urls.unpaginateCategory, "SET_API_UNPAGINATE_CATEGORY"),
     [fetchData, urls.unpaginateCategory],
+  );
+
+   const fetchYear = useCallback(
+    () => fetchData(urls.year, "SET_API_YEAR"),
+    [fetchData, urls.year],
+  );
+
+  const fetchUnpaginateYear = useCallback(
+    () => fetchData(urls.unpaginateYear, "SET_API_UNPAGINATE_YEAR"),
+    [fetchData, urls.unpaginateYear],
   );
 
   const fetchProduct = useCallback(
@@ -235,6 +251,8 @@ const ProductContext = ({ children }) => {
 
         fetchCategory,
         fetchUnpaginateCategory,
+        fetchYear,
+        fetchUnpaginateYear,
 
         fetchProduct,
         fetchUnpaginateProduct,
