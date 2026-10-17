@@ -1,7 +1,8 @@
 const photos = [
   {
     id: 1,
-    image: "/upload/grid/1.jpg",
+    thumbnail_image: "/upload/grid/1.jpg",
+    preview_image: "/upload/grid/1.jpg",
     title: "Young beauties picking flowers in the courtyard",
     categoriesId: 1,
     yearId: 1,
@@ -61,7 +62,8 @@ const photos = [
 
   {
     id: 2,
-    image: "/upload/grid/2.jpg",
+    thumbnail_image: "/upload/grid/2.jpg",
+    preview_image: "/upload/grid/2.jpg",
     title: "Children education",
     categoriesId: 2,
     yearId: 1,
@@ -98,7 +100,8 @@ const photos = [
 
   {
     id: 3,
-    image: "/upload/grid/3.jpg",
+    thumbnail_image: "/upload/grid/3.jpg",
+    preview_image: "/upload/grid/3.jpg",
     title: "Education",
     categoriesId: 3,
     yearId: 1,
@@ -135,7 +138,8 @@ const photos = [
 
   {
     id: 4,
-    image: "/upload/grid/4.jpg",
+    thumbnail_image: "/upload/grid/4.jpg",
+    preview_image: "/upload/grid/4.jpg",
     title: "Children food",
     categoriesId: 4,
     yearId: 1,
@@ -172,7 +176,8 @@ const photos = [
 
   {
     id: 5,
-    image: "/upload/grid/5.jpg",
+    thumbnail_image: "/upload/grid/5.jpg",
+    preview_image: "/upload/grid/5.jpg",
     title: "Children nature",
     categoriesId: 1,
     yearId: 2,
@@ -209,7 +214,8 @@ const photos = [
 
   {
     id: 6,
-    image: "/upload/grid/6.jpg",
+    thumbnail_image: "/upload/grid/6.jpg",
+    preview_image: "/upload/grid/6.jpg",
     title: "Food education",
     categoriesId: 5,
     yearId: 2,
@@ -246,7 +252,8 @@ const photos = [
 
   {
     id: 7,
-    image: "/upload/grid/7.jpg",
+    thumbnail_image: "/upload/grid/7.jpg",
+    preview_image: "/upload/grid/7.jpg",
     title: "Children nature",
     categoriesId: 1,
     yearId: 2,
@@ -283,7 +290,8 @@ const photos = [
 
   {
     id: 8,
-    image: "/upload/grid/8.jpg",
+    thumbnail_image: "/upload/grid/8.jpg",
+    preview_image: "/upload/grid/8.jpg",
     title: "Education",
     categoriesId: 3,
     yearId: 2,
@@ -320,7 +328,8 @@ const photos = [
 
   {
     id: 9,
-    image: "/upload/grid/9.jpg",
+    thumbnail_image: "/upload/grid/9.jpg",
+    preview_image: "/upload/grid/9.jpg",
     title: "Children nature",
     categoriesId: 1,
     yearId: 3,
@@ -357,7 +366,8 @@ const photos = [
 
   {
     id: 10,
-    image: "/upload/grid/11.webp",
+    thumbnail_image: "/upload/grid/11.webp",
+    preview_image: "/upload/grid/11.webp",
     title: "Garden summer sunflower",
     categoriesId: 6,
     yearId: 4,
@@ -394,7 +404,8 @@ const photos = [
 
   {
     id: 11,
-    image: "/upload/grid/22.jpg",
+    thumbnail_image: "/upload/grid/22.jpg",
+    preview_image: "/upload/grid/22.jpg",
     title: "Garden rainbow carrots",
     categoriesId: 7,
     yearId: 4,
@@ -431,7 +442,8 @@ const photos = [
 
   {
     id: 12,
-    image: "/upload/grid/33.jpg",
+    thumbnail_image: "/upload/grid/33.jpg",
+    preview_image: "/upload/grid/33.jpg",
     title: "Rioroor ttt",
     categoriesId: 8,
     yearId: 4,
@@ -468,7 +480,8 @@ const photos = [
 
   {
     id: 13,
-    image: "/upload/grid/44.jpg",
+    thumbnail_image: "/upload/grid/44.jpg",
+    preview_image: "/upload/grid/44.jpg",
     title: "Rttc Uyz Okk",
     categoriesId: 9,
     yearId: 4,

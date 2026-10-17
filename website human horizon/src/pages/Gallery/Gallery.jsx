@@ -136,7 +136,7 @@ const Gallery = () => {
                 >
                   <div className="photo-post position-relative overflow-hidden rounded-4">
                     <img
-                      src={item.image}
+                      src={item.thumbnail_image}
                       alt={item.alt || item.title || "Gallery Image"}
                       className="w-100 d-block gallery-image"
                     />
@@ -270,7 +270,7 @@ const Gallery = () => {
           >
             <div className="image-wrapper d-flex align-items-center justify-content-center">
               <img
-                src={photos[selectedIndex].image}
+                src={photos[selectedIndex].thumbnail_image}
                 alt={
                   photos[selectedIndex].alt ||
                   photos[selectedIndex].title ||

@@ -243,14 +243,54 @@ class SendResetOTPSerializer(serializers.Serializer):
 
 
 # ===== ResetPasswordSerializer =====
+# class ResetPasswordSerializer(serializers.Serializer):
+#     eemmaaiill = serializers.EmailField()
+#     otp = serializers.CharField(min_length=6, max_length=6)
+#     new_password = serializers.CharField(
+#         write_only=True,
+#         min_length=4,
+#         trim_whitespace=False,
+#     )
+#     confirm_password = serializers.CharField(
+#         write_only=True,
+#         trim_whitespace=False,
+#     )
+
+#     def validate_eemmaaiill(self, value):
+#         value = value.strip().lower()
+
+#         if not CustomUser.objects.filter(
+#             eemmaaiill__iexact=value,
+#             is_active=True,
+#         ).exists():
+#             raise serializers.ValidationError(
+#                 "No active account found with this email address."
+#             )
+
+#         return value
+
+#     def validate(self, attrs):
+#         if attrs["new_password"] != attrs["confirm_password"]:
+#             raise serializers.ValidationError({
+#                 "confirm_password": "Passwords do not match."
+#             })
+
+#         return attrs
+
 class ResetPasswordSerializer(serializers.Serializer):
     eemmaaiill = serializers.EmailField()
-    otp = serializers.CharField(min_length=6, max_length=6)
+
+    otp = serializers.CharField(
+        min_length=6,
+        max_length=6,
+    )
+
     new_password = serializers.CharField(
         write_only=True,
         min_length=4,
         trim_whitespace=False,
     )
+
     confirm_password = serializers.CharField(
         write_only=True,
         trim_whitespace=False,
@@ -270,9 +310,28 @@ class ResetPasswordSerializer(serializers.Serializer):
         return value
 
     def validate(self, attrs):
-        if attrs["new_password"] != attrs["confirm_password"]:
+        email = attrs["eemmaaiill"]
+        new_password = attrs["new_password"]
+        confirm_password = attrs["confirm_password"]
+
+        # CHECK 1: Confirm passwords match
+        if new_password != confirm_password:
             raise serializers.ValidationError({
                 "confirm_password": "Passwords do not match."
+            })
+
+        # CHECK 2: New password must differ from current password
+        user = CustomUser.objects.filter(
+            eemmaaiill__iexact=email,
+            is_active=True,
+        ).first()
+
+        if user and user.check_password(new_password):
+            raise serializers.ValidationError({
+                "new_password": (
+                    "Your new password cannot be the same as your "
+                    "current password. Please choose a different password."
+                )
             })
 
         return attrs

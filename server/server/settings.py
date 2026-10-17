@@ -11,17 +11,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-# import os
-# from pathlib import Path
-# from datetime import timedelta
-
-# # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 import os
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
@@ -55,10 +51,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django_json_widget',
+    "django_filters",
 
     # Custom apps
     'Address.apps.AddressConfig',
     'CustomUser.apps.CustomUserConfig',
+    'Product.apps.ProductConfig',
     'Blog.apps.BlogConfig',
     'Settings.apps.SettingsConfig',
     'Contact.apps.ContactConfig',
@@ -145,10 +143,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # # Pagination
-# REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 10,
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+}
 
 
 # Internationalization
@@ -173,14 +171,20 @@ CORS_ALLOW_CREDENTIALS = True
 AUTH_USER_MODEL = 'CustomUser.CustomUser'
 
 
-
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        # other authentication classes...
+    # Authentication
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
-    # other settings...
+
+    # Filtering, searching, and ordering
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
 }
+
 
 # Example token expiration settings
 SIMPLE_JWT = {
@@ -213,14 +217,6 @@ CACHES = {
 }
 
 # OTP Settings
-# OTP_EXPIRY_SECONDS = 300 # 5 minutes
-
-# SMS Settings
-# SMS_API_URL = os.environ.get("SMS_API_URL", "")
-# SMS_API_KEY = os.environ.get("SMS_API_KEY", "")
-# SMS_SENDER_ID = os.environ.get("SMS_SENDER_ID", "")
-
-
 # Email Configuration
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 

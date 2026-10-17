@@ -101,7 +101,7 @@ const ProductDetails = () => {
                   <img
                     // src={imageUrl}
                     // src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=2000&auto=format&fit=crop"
-                    src={findProductDetails && findProductDetails.image}
+                    src={findProductDetails && findProductDetails.preview_image}
                     alt="Young beauties picking flowers in the courtyard"
                     className="w-100 h-100"
                     style={{
@@ -315,7 +315,7 @@ const ProductDetails = () => {
 
           <img
             // src={imageUrl}
-            src={findProductDetails && findProductDetails.image}
+            src={findProductDetails && findProductDetails.preview_image}
             alt="Full preview"
             className="img-fluid"
             onClick={(e) => e.stopPropagation()}

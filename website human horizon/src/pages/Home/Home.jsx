@@ -298,7 +298,7 @@ const Home = () => {
                   className="image-link"
                 >
                   <img
-                    src={photo.image}
+                    src={photo.thumbnail_image}
                     alt={
                       photoCategory ? photoCategory.categories : "Gallery Image"
                     }
