@@ -184,7 +184,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = "category"
-        ordering = ["name"]
+        # ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -201,7 +201,7 @@ class Year(models.Model):
 
     class Meta:
         db_table = "year"
-        ordering = ["-year"]
+        # ordering = ["-year"]
 
     def __str__(self):
         return self.year
@@ -227,7 +227,7 @@ class License(models.Model):
 
     class Meta:
         db_table = "license"
-        ordering = ["price", "name"]
+        # ordering = ["price", "name"]
 
     def __str__(self):
         return self.name
@@ -325,7 +325,7 @@ class Product(models.Model):
 
     class Meta:
         db_table = "product"
-        ordering = ["-created_at"]
+        # ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.product_id} - {self.name}"

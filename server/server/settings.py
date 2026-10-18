@@ -171,6 +171,26 @@ CORS_ALLOW_CREDENTIALS = True
 AUTH_USER_MODEL = 'CustomUser.CustomUser'
 
 
+# REST_FRAMEWORK = {
+#     # Authentication
+#     "DEFAULT_AUTHENTICATION_CLASSES": [
+#         "rest_framework_simplejwt.authentication.JWTAuthentication",
+#     ],
+
+#     # Filtering, searching, and ordering
+#     "DEFAULT_FILTER_BACKENDS": [
+#         "django_filters.rest_framework.DjangoFilterBackend",
+#         "rest_framework.filters.SearchFilter",
+#         "rest_framework.filters.OrderingFilter",
+#     ],
+
+#     # Pagination
+#     "DEFAULT_PAGINATION_CLASS": (
+#         "rest_framework.pagination.PageNumberPagination"
+#     ),
+#     "PAGE_SIZE": 10,
+# }
+
 REST_FRAMEWORK = {
     # Authentication
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -183,12 +203,6 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ],
-
-    # Pagination
-    "DEFAULT_PAGINATION_CLASS": (
-        "rest_framework.pagination.PageNumberPagination"
-    ),
-    "PAGE_SIZE": 10,
 }
 
 

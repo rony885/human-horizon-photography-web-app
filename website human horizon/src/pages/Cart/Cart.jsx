@@ -74,7 +74,7 @@ const Cart = () => {
                         </p>
 
                         <p className="text-secondary small mb-0">
-                          {item.assetId || "N/A"}
+                          {item.product_code || "N/A"}
                         </p>
 
                         <p className="text-secondary small mb-0">

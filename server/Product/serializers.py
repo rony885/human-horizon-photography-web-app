@@ -59,105 +59,58 @@ from rest_framework import serializers
 from .models import Category, Year, License, Product
 
 
-# CATEGORY SERIALIZER
 class CategorySerializer(serializers.ModelSerializer):
-    categories = serializers.CharField(source="name", read_only=True)
-
+    status = serializers.BooleanField(default=True)
     class Meta:
         model = Category
-        fields = [
-            "id",
-            "status",
-            "name",
-            "categories",
-            "created_at",
-            "updated_at",
-        ]
+        fields = "__all__"
 
+class UnpaginateCategorySerializer(serializers.ModelSerializer):
+    status = serializers.BooleanField(default=True)
+    class Meta:
+        model = Category
+        fields = "__all__"
 
-class UnpaginateCategorySerializer(CategorySerializer):
-    pass
-
-
-# YEAR SERIALIZER
 class YearSerializer(serializers.ModelSerializer):
+    status = serializers.BooleanField(default=True)
     class Meta:
         model = Year
-        fields = [
-            "id",
-            "status",
-            "year",
-            "created_at",
-            "updated_at",
-        ]
+        fields = "__all__"
 
 
-class UnpaginateYearSerializer(YearSerializer):
-    pass
+class UnpaginateYearSerializer(serializers.ModelSerializer):
+    status = serializers.BooleanField(default=True)
+    class Meta:
+        model = Year
+        fields = "__all__"
 
-# LICENSE SERIALIZER
+
 class LicenseSerializer(serializers.ModelSerializer):
+    status = serializers.BooleanField(default=True)
     class Meta:
         model = License
-        fields = [
-            "id",
-            "status",
-            "name",
-            "price",
-            "description",
-            "created_at",
-            "updated_at",
-        ]
-        
-class UnpaginateLicenseSerializer(YearSerializer):
-    pass
+        fields = "__all__"
+
+class UnpaginateLicenseSerializer(serializers.ModelSerializer):
+    status = serializers.BooleanField(default=True)
+    class Meta:
+        model = License
+        fields = "__all__"
 
 
-# PRODUCT SERIALIZER
 class ProductSerializer(serializers.ModelSerializer):
+    status = serializers.BooleanField(default=True)
+
     category = CategorySerializer(read_only=True)
     year = YearSerializer(read_only=True)
+    license = LicenseSerializer(read_only=True)
 
-    assetId = serializers.CharField(
-        source="product_code",
-        required=True,
-    )
-
-    uploadDate = serializers.DateField(
-        source="upload_date",
-        required=False,
-    )
-
-    premiumText = serializers.CharField(
-        source="premium_text",
-        required=False,
-    )
-
-    descriptions = serializers.CharField(
-        source="description",
-        required=False,
-        allow_blank=True,
-        allow_null=True,
-    )
-
-    categoriesId = serializers.PrimaryKeyRelatedField(
-        source="category",
-        queryset=Category.objects.all(),
+    # Accept original image uploads, but never expose the private file URL.
+    original_image = serializers.ImageField(
         write_only=True,
         required=False,
         allow_null=True,
     )
-
-    yearId = serializers.PrimaryKeyRelatedField(
-        source="year",
-        queryset=Year.objects.all(),
-        write_only=True,
-        required=False,
-        allow_null=True,
-    )
-
-    category_id = serializers.IntegerField(read_only=True)
-    year_id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Product
@@ -166,26 +119,56 @@ class ProductSerializer(serializers.ModelSerializer):
             "product_id",
             "status",
             "name",
-            "assetId",
+            "product_code",
             "category",
-            "category_id",
-            "categoriesId",
             "year",
-            "year_id",
-            "yearId",
+            "license",
             "thumbnail_image",
             "preview_image",
-            "uploadDate",
+            "original_image",
+            "upload_date",
             "premium",
-            "premiumText",
-            "descriptions",
+            "premium_text",
+            "description",
             "formats",
-            "license",
             "created_at",
             "updated_at",
         ]
 
 
-# UNPAGINATED PRODUCT SERIALIZER
-class UnpaginateProductSerializer(ProductSerializer):
-    pass
+class UnpaginateProductSerializer(serializers.ModelSerializer):
+    status = serializers.BooleanField(default=True)
+
+    category = CategorySerializer(read_only=True)
+    year = YearSerializer(read_only=True)
+    license = LicenseSerializer(read_only=True)
+
+    # Accept original image uploads, but never expose the private file URL.
+    original_image = serializers.ImageField(
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "product_id",
+            "status",
+            "name",
+            "product_code",
+            "category",
+            "year",
+            "license",
+            "thumbnail_image",
+            "preview_image",
+            "original_image",
+            "upload_date",
+            "premium",
+            "premium_text",
+            "description",
+            "formats",
+            "created_at",
+            "updated_at",
+        ]

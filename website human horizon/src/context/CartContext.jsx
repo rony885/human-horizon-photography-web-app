@@ -50,13 +50,21 @@ const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // CART
-  const addToCart = (id, amount, product) => {
+  const addToCart = (
+    id,
+    amount,
+    product,
+    selectedLicense,
+    licenseOptions = [],
+  ) => {
     dispatch({
       type: "ADD_TO_CART",
       payload: {
         id,
         amount,
         product,
+        selectedLicense,
+        licenseOptions,
       },
     });
   };
@@ -110,12 +118,12 @@ const CartProvider = ({ children }) => {
   };
 
   // changeLicense
-  const changeLicense = (id, license) => {
+  const changeLicense = (id, licenseId) => {
     dispatch({
       type: "CHANGE_LICENSE",
       payload: {
         id,
-        license,
+        licenseId,
       },
     });
   };

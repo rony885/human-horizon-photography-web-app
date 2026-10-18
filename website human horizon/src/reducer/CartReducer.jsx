@@ -1,53 +1,32 @@
 const CartReducer = (state, action) => {
   // ADD TO CART
   if (action.type === "ADD_TO_CART") {
-    const { product } = action.payload;
+    const { product, selectedLicense, licenseOptions = [] } = action.payload;
 
-    // const exist = state.cart.find(
-    //   (item) => Number(item.productId) === Number(product.id),
-    // );
-    const exist = state.cart.find((item) => item.id === product.id);
+    const exist = state.cart.find(
+      (item) => Number(item.productId) === Number(product.id),
+    );
 
-    // Already in cart
     if (exist) {
       return state;
     }
 
-    // const cartProduct = {
-    //   id: product.id,
-    //   productId: product.id,
-    //   title: product.title,
-    //   image: product.image,
-
-    //   // IMPORTANT
-    //   assetId: product.assetId || "",
-
-    //   formats: product.formats || [],
-    //   amount: 1,
-
-    //   premium: product.premium || false,
-    //   premiumText: product.premiumText || "",
-
-    //   licenses: product.licenses || {},
-
-    //   license: "standard",
-    //   licenseName: product.licenses?.standard?.name || "Standard License",
-
-    //   price: Number(product.licenses?.standard?.price || 0),
-    // };
+    // Use the selected license from the API.
+    const selected =
+      selectedLicense ||
+      licenseOptions.find((item) => item.status) ||
+      product.license ||
+      null;
 
     const cartProduct = {
-      // PRODUCT INFORMATION
       ...product,
 
       id: product.id,
       productId: product.id,
 
-      // PRODUCT TITLE
       title: product.name || product.title || "Untitled Product",
       name: product.name || product.title || "Untitled Product",
 
-      // PRODUCT IMAGES
       image:
         product.thumbnail_image || product.preview_image || product.image || "",
 
@@ -56,31 +35,29 @@ const CartReducer = (state, action) => {
       preview_image:
         product.preview_image || product.thumbnail_image || product.image || "",
 
-      // ASSET INFORMATION
-      assetId: product.assetId || "",
+      assetId: product.assetId || product.product_code || "",
 
-      // CATEGORY
       category_id: product.category_id ?? product.category?.id ?? null,
       category: product.category || null,
 
-      // YEAR
       year_id: product.year_id ?? product.year?.id ?? null,
       year: product.year || null,
 
-      // PRODUCT FORMATS
       formats: product.formats || [],
 
-      // PREMIUM INFORMATION
       premium: product.premium ?? false,
-      premiumText: product.premiumText || "",
+      premiumText: product.premium_text || product.premiumText || "",
 
-      // LICENSE INFORMATION
-      licenses: product.licenses || {},
-      license: "standard",
-      licenseName: product.licenses?.standard?.name || "Standard License",
-      price: Number(product.licenses?.standard?.price || 0),
+      // Save all available licenses for the header dropdown.
+      licenseOptions,
 
-      // QUANTITY
+      // Save the selected license and its actual API price.
+      licenseId: selected ? String(selected.id) : "",
+      license: selected ? String(selected.id) : "",
+      licenseName: selected?.name || "",
+      licenseDescription: selected?.description || "",
+      price: Number(selected?.price || 0),
+
       amount: 1,
     };
 
@@ -92,24 +69,30 @@ const CartReducer = (state, action) => {
 
   // CHANGE LICENSE
   if (action.type === "CHANGE_LICENSE") {
-    const { id, license } = action.payload;
+    const { id, licenseId } = action.payload;
 
     const updatedCart = state.cart.map((item) => {
-      if (item.id !== id) {
+      if (Number(item.id) !== Number(id)) {
         return item;
       }
 
-      const selectedLicense = item.licenses?.[license];
+      // Find the newly selected license by its API ID.
+      const selected = (item.licenseOptions || []).find(
+        (license) => String(license.id) === String(licenseId),
+      );
 
-      if (!selectedLicense) {
+      // Do not update if the license ID is invalid.
+      if (!selected) {
         return item;
       }
 
       return {
         ...item,
-        license,
-        licenseName: selectedLicense.name,
-        price: Number(selectedLicense.price || 0),
+        license: String(selected.id),
+        licenseId: String(selected.id),
+        licenseName: selected.name,
+        licenseDescription: selected.description || "",
+        price: Number(selected.price || 0),
       };
     });
 

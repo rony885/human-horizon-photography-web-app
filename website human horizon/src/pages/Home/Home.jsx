@@ -27,10 +27,11 @@ const Home = () => {
     product,
     unpaginate_category,
     year,
-
+    license,
     fetchProduct,
     fetchUnpaginateCategory,
     fetchYear,
+    fetchLicense,
   } = useProductContext();
 
   const galleryRef = useRef(null);
@@ -48,22 +49,35 @@ const Home = () => {
     fetchProduct();
     fetchUnpaginateCategory();
     fetchYear();
-  }, [fetchProduct, fetchUnpaginateCategory, fetchYear]);
+    fetchLicense();
+  }, [fetchProduct, fetchUnpaginateCategory, fetchYear, fetchLicense]);
 
   useEffect(() => {
     localStorage.setItem("selectedCategory", selectedCategory);
     localStorage.setItem("selectedYear", selectedYear);
   }, [selectedCategory, selectedYear]);
 
+  // const filteredPhotos = product.filter((photo) => {
+  //   const categoryMatch =
+  //     selectedCategory === "All" ||
+  //     Number(photo.categoriesId) === Number(selectedCategory);
+
+  //   const yearMatch =
+  //     selectedYear === "All" || Number(photo.year_id) === Number(selectedYear);
+
+  //   return categoryMatch && yearMatch;
+  // });
+
   const filteredPhotos = product.filter((photo) => {
+    const categoryId = photo.category?.id;
+    const yearId = photo.year?.id;
+
     const categoryMatch =
       selectedCategory === "All" ||
-      Number(photo.categoriesId) === Number(selectedCategory);
+      Number(categoryId) === Number(selectedCategory);
 
-    // const yearMatch =
-    //   selectedYear === "All" || Number(photo.yearId) === Number(selectedYear);
     const yearMatch =
-      selectedYear === "All" || Number(photo.year_id) === Number(selectedYear);
+      selectedYear === "All" || Number(yearId) === Number(selectedYear);
 
     return categoryMatch && yearMatch;
   });
@@ -213,11 +227,20 @@ const Home = () => {
     };
   }, [filteredPhotos]);
 
+  const activeLicenses = Array.isArray(license)
+    ? license.filter((item) => item.status)
+    : [];
+
+  const standardLicense =
+    activeLicenses.find(
+      (item) => item.name?.trim().toLowerCase() === "standard",
+    ) || activeLicenses[0];
+
   return (
     <Wrapper>
       <section className="photos-section" style={{ marginTop: "100px" }}>
         <div className="filter-area row align-items-start">
-          <div className="col-lg-8 category-filter-wrapper">
+          {/* <div className="col-lg-8 category-filter-wrapper">
             <h5 className="filter-title">Short by: Category</h5>
 
             <div className="category-filter row_horizon">
@@ -244,9 +267,38 @@ const Home = () => {
                 </button>
               ))}
             </div>
+          </div> */}
+
+          <div className="col-lg-8 category-filter-wrapper">
+            <h5 className="filter-title">Short by: Category</h5>
+
+            <div className="category-filter row_horizon">
+              <button
+                type="button"
+                className={selectedCategory === "All" ? "active" : ""}
+                onClick={() => setSelectedCategory("All")}
+              >
+                ALL
+              </button>
+
+              {unpaginate_category.map((category) => (
+                <button
+                  type="button"
+                  key={category.id}
+                  className={
+                    Number(selectedCategory) === Number(category.id)
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() => setSelectedCategory(String(category.id))}
+                >
+                  {category.name ?? category.categories}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="col-lg-2 year-filter-wrapper">
+          {/* <div className="col-lg-2 year-filter-wrapper">
             <h5 className="filter-title">Short by: Year</h5>
 
             <div className="year-filter row_horizon">
@@ -271,6 +323,33 @@ const Home = () => {
                 </button>
               ))}
             </div>
+          </div> */}
+
+          <div className="col-lg-2 year-filter-wrapper">
+            <h5 className="filter-title">Short by: Year</h5>
+
+            <div className="year-filter row_horizon">
+              <button
+                type="button"
+                className={selectedYear === "All" ? "active" : ""}
+                onClick={() => setSelectedYear("All")}
+              >
+                ALL
+              </button>
+
+              {year.map((yr) => (
+                <button
+                  type="button"
+                  key={yr.id}
+                  className={
+                    Number(selectedYear) === Number(yr.id) ? "active" : ""
+                  }
+                  onClick={() => setSelectedYear(String(yr.id))}
+                >
+                  {yr.year}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="col-lg-2 clear-filter-wrapper pr-0">
@@ -286,13 +365,24 @@ const Home = () => {
 
         <div className="photos-box iso-call" ref={galleryRef}>
           {filteredPhotos.map((photo) => {
-            const photoCategory = unpaginate_category.find(
-              (category) => Number(category.id) === Number(photo.categoriesId),
-            );
+            // const photoCategory = unpaginate_category.find(
+            //   (category) => Number(category.id) === Number(photo.categoriesId),
+            // );
 
-            const photoYear = year.find(
-              (year) => Number(year.id) === Number(photo.yearId),
-            );
+            // const photoYear = year.find(
+            //   (year) => Number(year.id) === Number(photo.yearId),
+            // );
+
+            // const isInWishlist = wishlist.some(
+            //   (item) => Number(item.id) === Number(photo.id),
+            // );
+
+            // const isInCart = cart.some(
+            //   (item) => Number(item.productId) === Number(photo.id),
+            // );
+
+            const photoCategory = photo.category;
+            const photoYear = photo.year;
 
             const isInWishlist = wishlist.some(
               (item) => Number(item.id) === Number(photo.id),
@@ -311,9 +401,7 @@ const Home = () => {
                 >
                   <img
                     src={photo.thumbnail_image}
-                    alt={
-                      photoCategory ? photoCategory.categories : "Gallery Image"
-                    }
+                    alt={photo.name || "Gallery Image"}
                   />
                 </Link>
 
@@ -322,11 +410,12 @@ const Home = () => {
                     <div className="title-post">
                       <h2>{photo.name}</h2>
                       <span className="text-capitalize">
-                        {photoCategory ? photoCategory.categories : ""}
+                        {photoCategory?.name || ""}
                       </span>
                       &nbsp;
                       <span className="text-capitalize">
-                        {photoYear ? photoYear.year : ""}
+                        {/* {photoYear ? photoYear.year : ""} */}
+                        {photoYear?.year || ""}
                       </span>
                     </div>
 
@@ -363,14 +452,34 @@ const Home = () => {
                       <Link
                         to="#"
                         className={`like ${isInCart ? "active-cart" : ""}`}
+                        // onClick={(e) => {
+                        //   e.preventDefault();
+
+                        //   if (isInCart) {
+                        //     removeCart(photo.id);
+                        //   } else {
+
+                        //     addToCart(photo.id, 1, photo);
+                        //   }
+                        // }}
                         onClick={(e) => {
                           e.preventDefault();
 
                           if (isInCart) {
                             removeCart(photo.id);
                           } else {
-                            // addToCart(photo.id, 1, null, null, photo);
-                            addToCart(photo.id, 1, photo);
+                            if (!standardLicense) {
+                              alert("No active license is available.");
+                              return;
+                            }
+
+                            addToCart(
+                              photo.id,
+                              1,
+                              photo,
+                              standardLicense,
+                              activeLicenses,
+                            );
                           }
                         }}
                       >

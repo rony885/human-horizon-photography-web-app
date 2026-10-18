@@ -190,17 +190,17 @@ const Checkout = () => {
                             <div className="d-flex align-items-start gap-3">
                               <img
                                 src={item.image}
-                                alt={item.title}
+                                alt={item.name || "Product"}
                                 className="product-img rounded-1 border"
                               />
 
                               <div>
                                 <p className="small text-dark lh-sm mb-1">
-                                  {item.title}
+                                  {item.name}
                                 </p>
 
                                 <p className="small text-dark lh-sm mb-1">
-                                  {item.assetId}
+                                  {item.product_code}
                                 </p>
 
                                 <p className="small text-dark lh-sm mb-1">
@@ -218,7 +218,7 @@ const Checkout = () => {
 
                           <td className="price-cell px-2 py-1">
                             <span className="small fw-semibold text-nowrap">
-                              <span className="fw-bold fs-5">৳</span>
+                              {/* <span className="fw-bold fs-5">৳$</span> */}$
                               {itemTotal}
                             </span>
                           </td>
@@ -240,8 +240,7 @@ const Checkout = () => {
                     </td>
 
                     <td className="fw-semibold text-end px-2 py-2 text-nowrap">
-                      <span className="fw-bold fs-5">৳</span>
-                      {total_price}
+                      ${total_price}
                     </td>
                   </tr>
 
@@ -272,8 +271,7 @@ const Checkout = () => {
                     <td className="fw-bold text-dark px-2 py-2">Total</td>
 
                     <td className="fw-bold text-end px-2 py-2 text-nowrap">
-                      <span className="fw-bold fs-5">৳</span>
-                      {total_price}
+                      ${total_price}
                     </td>
                   </tr>
 

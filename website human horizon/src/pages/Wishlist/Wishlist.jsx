@@ -93,7 +93,9 @@ const Wishlist = () => {
                   <div className="pt-1">
                     {/* <p className="fw-semibold item-id mb-0">{item.title}</p> */}
                     <p className="fw-semibold item-id mb-0">{item.name}</p>
-                    <p className="item-format mb-0">{item.assetId || "N/A"}</p>
+                    <p className="item-format mb-0">
+                      {item.product_code || "N/A"}
+                    </p>
                     <p className="item-format mb-0">JPG</p>
                   </div>
                 </div>

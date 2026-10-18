@@ -352,7 +352,7 @@ const Header = ({ aT, c_user, handleLogout }) => {
                             item.preview_image ||
                             ""
                           }
-                          alt={item.title || item.name || "Product"}
+                          alt={item.name || "Product"}
                           onError={(e) => {
                             console.error(
                               "Cart image failed to load:",
@@ -368,8 +368,8 @@ const Header = ({ aT, c_user, handleLogout }) => {
                       <div className="cart-item-top">
                         <div>
                           {/* <h4>Fishing Net</h4> */}
-                          <h4>{item.title}</h4>
-                          <p>{item.assetId || "N/A"}</p>
+                          <h4>{item.name}</h4>
+                          <p>{item.product_code || "N/A"}</p>
                           <p>JPG</p>
                         </div>
 
@@ -391,7 +391,7 @@ const Header = ({ aT, c_user, handleLogout }) => {
                           <option value="standard">Standard</option>
                           <option value="extended">Enhanced</option>
                         </select> */}
-                        <select
+                        {/* <select
                           value={item.license}
                           onChange={(e) =>
                             changeLicense(item.id, e.target.value)
@@ -400,6 +400,19 @@ const Header = ({ aT, c_user, handleLogout }) => {
                           <option value="standard">Standard</option>
                           <option value="enhanced">Enhanced</option>
                           <option value="free">Free</option>
+                        </select> */}
+
+                        <select
+                          value={String(item.licenseId || item.license || "")}
+                          onChange={(e) =>
+                            changeLicense(item.id, e.target.value)
+                          }
+                        >
+                          {(item.licenseOptions || []).map((license) => (
+                            <option key={license.id} value={String(license.id)}>
+                              {license.name}
+                            </option>
+                          ))}
                         </select>
                       </div>
 
