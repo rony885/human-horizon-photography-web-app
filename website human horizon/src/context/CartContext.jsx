@@ -50,30 +50,16 @@ const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // CART
-  // const addToCart = (id, amount, product) => {
-  //   dispatch({
-  //     type: "ADD_TO_CART",
-  //     payload: {
-  //       id,
-  //       amount,
-  //       product,
-  //     },
-  //   });
-  // };
-
-  // CART
-  const addToCart = (id, amount, product, license = "standard") => {
+  const addToCart = (id, amount, product) => {
     dispatch({
       type: "ADD_TO_CART",
       payload: {
         id,
         amount,
         product,
-        license, // Pass the selected license to the reducer
       },
     });
   };
-
 
   const removeCart = (id) => {
     dispatch({

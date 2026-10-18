@@ -57,6 +57,22 @@ const ProductReducer = (state, action) => {
         isError: false,
       };
 
+    case "SET_API_LICENSE":
+      return {
+        ...state,
+        isLoading: false,
+        license: action.payload,
+        isError: false,
+      };
+
+    case "SET_API_UNPAGINATE_LICENSE":
+      return {
+        ...state,
+        isLoading: false,
+        unpaginate_license: action.payload,
+        isError: false,
+      };
+
     case "SET_API_PRODUCT":
       return {
         ...state,

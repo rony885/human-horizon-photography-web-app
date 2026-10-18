@@ -341,7 +341,27 @@ const Header = ({ aT, c_user, handleLogout }) => {
                 return (
                   <div key={item.id} className="cart-item">
                     <div className="cart-item-image">
-                      <img src={item && item.image} alt="Images" />
+                      {/* <img src={item && item.image} alt="Images" /> */}
+                      {/* <img src={item && item.image} alt="Images" /> */}
+
+                      <div className="cart-item-image">
+                        <img
+                          src={
+                            item.image ||
+                            item.thumbnail_image ||
+                            item.preview_image ||
+                            ""
+                          }
+                          alt={item.title || item.name || "Product"}
+                          onError={(e) => {
+                            console.error(
+                              "Cart image failed to load:",
+                              e.currentTarget.src,
+                            );
+                            e.currentTarget.style.display = "none";
+                          }}
+                        />
+                      </div>
                     </div>
 
                     <div className="cart-item-info">
@@ -366,7 +386,11 @@ const Header = ({ aT, c_user, handleLogout }) => {
                       <div className="license-section">
                         <label>License</label>
 
-                       
+                        {/* <select defaultValue="Standard">
+                          <option value="free">Free</option>
+                          <option value="standard">Standard</option>
+                          <option value="extended">Enhanced</option>
+                        </select> */}
                         <select
                           value={item.license}
                           onChange={(e) =>
@@ -375,7 +399,7 @@ const Header = ({ aT, c_user, handleLogout }) => {
                         >
                           <option value="standard">Standard</option>
                           <option value="enhanced">Enhanced</option>
-                          {/* <option value="free">Free</option> */}
+                          <option value="free">Free</option>
                         </select>
                       </div>
 

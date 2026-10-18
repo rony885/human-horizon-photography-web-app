@@ -5,10 +5,11 @@ import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import photosArray from "../../DataJS/photos.js";
-import categoriesArray from "../../DataJS/categories.js";
-import yearsArray from "../../DataJS/year.js";
-import { useCartContext } from "../../context/CartContext.jsx";
+import { useProductContext } from "../context/ProductContext.jsx";
+// import photosArray from "../../DataJS/photos.js";
+import categoriesArray from "../DataJS/categories.js";
+import yearsArray from "../DataJS/year.js";
+import { useCartContext } from "../context/CartContext.jsx";
 
 const Home = () => {
   const {
@@ -19,6 +20,9 @@ const Home = () => {
     removeWishlist,
     wishlist,
   } = useCartContext();
+
+  // data fetching
+  const { product, fetchProduct } = useProductContext();
 
   const galleryRef = useRef(null);
 
@@ -35,10 +39,15 @@ const Home = () => {
   );
 
   useEffect(() => {
-    setPhotos(photosArray);
+    fetchProduct();
+  }, [fetchProduct]);
+
+  useEffect(() => {
+    setPhotos(product && product);
+    // setPhotos(photosArray);
     setCategories(categoriesArray);
     setYears(yearsArray);
-  }, []);
+  }, [product]);
 
   useEffect(() => {
     localStorage.setItem("selectedCategory", selectedCategory);
@@ -682,6 +691,9 @@ const Wrapper = styled.section`
 `;
 
 export default Home;
+
+
+
 
 // import React, { useEffect, useRef, useState } from "react";
 // import styled from "styled-components";

@@ -3,7 +3,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from .models import Category, Year, License, Product
-from .serializers import CategorySerializer, UnpaginateCategorySerializer, YearSerializer, UnpaginateYearSerializer, LicenseSerializer, UnpaginateLicenseSerializer, ProductSerializer, UnpaginateProductSerializer
+from .serializers import CategorySerializer, YearSerializer, LicenseSerializer, ProductSerializer 
+from .serializers import UnpaginateCategorySerializer, UnpaginateYearSerializer, UnpaginateLicenseSerializer, UnpaginateProductSerializer
 from .paginations import CategoryPagination, YearPagination,  ProductPagination
 
 

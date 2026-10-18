@@ -5,8 +5,8 @@
 
 // import * as yup from "yup";
 // import axios from "axios";
-// import Form from "react-bootstrap/Form";
 // import { Formik, Form as FormikForm } from "formik";
+// import Form from "react-bootstrap/Form";
 // import InputGroup from "react-bootstrap/InputGroup";
 
 // const initialValues = {
@@ -412,13 +412,12 @@
 
 import React, { useState } from "react";
 import styled from "styled-components";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as yup from "yup";
 import axios from "axios";
-import Form from "react-bootstrap/Form";
 import { Formik, Form as FormikForm } from "formik";
+import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 
 const schema = yup.object({

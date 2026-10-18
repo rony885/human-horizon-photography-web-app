@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router";
 import styled from "styled-components";
 
-
+// import { useProductContext } from "../../context/ProductContext.jsx";
 import photosArray from "../../DataJS/photos.js";
 import categoriesArray from "../../DataJS/categories.js";
 // import yearsArray from "../../DataJS/year.js";
@@ -18,7 +18,12 @@ const ProductDetails = () => {
     // wishlist,
   } = useCartContext();
 
+  // data fetching
+  //   const { product, fetchProduct } = useProductContext();
 
+  //   useEffect(() => {
+  //     fetchProduct();
+  //   }, [fetchProduct]);
 
   const [photos, setPhotos] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -37,12 +42,10 @@ const ProductDetails = () => {
 
   useEffect(() => {
     setPhotos(photosArray);
-
+    // setPhotos(product && product);
     setCategories(categoriesArray);
     // setYears(yearsArray);
   }, []);
-
-
 
   const findProductDetails = photos.find(
     (productItem) => productItem.id === parseInt(id),
@@ -125,7 +128,8 @@ const ProductDetails = () => {
                 <div className="d-flex align-items-center justify-content-between mt-3">
                   <div className="bg-light px-3 py-2 rounded small fw-semibold">
                     <i className="fa-solid fa-gem me-1"></i>
-                    Premium Content by Human & Horizon
+                    {/* Premium Content by Human & Horizon */}
+                    {findProductDetails && findProductDetails.premiumText}
                   </div>
 
                   <div className="d-flex gap-2">
@@ -173,7 +177,7 @@ const ProductDetails = () => {
                   >
                     <option value="standard">Standard</option>
                     <option value="enhanced">Enhanced</option>
-                    {/* <option value="free">Free</option> */}
+                    <option value="enhanced">Free</option>
                   </select>
 
                   <h4 className="small fw-bold my-3">
@@ -210,26 +214,6 @@ const ProductDetails = () => {
                 <button
                   className="btn btn-danger w-100 mb-3"
                   type="button"
-                  // onClick={(e) => {
-                  //   e.preventDefault();
-
-                  //   if (!findProductDetails) return;
-
-                  //   if (isInCart) {
-                  //     const cartItem = cart.find(
-                  //       (item) =>
-                  //         Number(item.productId) ===
-                  //         Number(findProductDetails.id),
-                  //     );
-
-                  //     if (cartItem) {
-                  //       removeCart(cartItem.id);
-                  //     }
-                  //   } else {
-                  //     addToCart(findProductDetails.id, 1, findProductDetails);
-                  //   }
-                  // }}
-
                   onClick={(e) => {
                     e.preventDefault();
 
@@ -246,13 +230,7 @@ const ProductDetails = () => {
                         removeCart(cartItem.id);
                       }
                     } else {
-                      // Pass the selected license along with the product
-                      addToCart(
-                        findProductDetails.id,
-                        1,
-                        findProductDetails,
-                        selectedLicense,
-                      );
+                      addToCart(findProductDetails.id, 1, findProductDetails);
                     }
                   }}
                 >
@@ -285,6 +263,7 @@ const ProductDetails = () => {
 
                   <div className="small fw-semibold mb-2">
                     {findProductDetails && findProductDetails.title}
+
                     <i className="fa-regular fa-copy ms-1 text-secondary"></i>
                   </div>
 

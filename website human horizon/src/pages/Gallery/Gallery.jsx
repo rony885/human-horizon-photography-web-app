@@ -270,7 +270,7 @@ const Gallery = () => {
           >
             <div className="image-wrapper d-flex align-items-center justify-content-center">
               <img
-                src={photos[selectedIndex].thumbnail_image}
+                src={photos[selectedIndex].main_image}
                 alt={
                   photos[selectedIndex].alt ||
                   photos[selectedIndex].title ||

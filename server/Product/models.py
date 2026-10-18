@@ -152,10 +152,8 @@ from django.utils import timezone
 from .storage import private_storage
 
 
-# =========================================================
-# GENERATE UNIQUE PRODUCT ID
-# =========================================================
 
+# ====== GENERATE UNIQUE PRODUCT ID ======
 def generate_product_id():
     prefix = "PROD-"
 
@@ -175,10 +173,8 @@ def generate_product_id():
     return f"{prefix}{next_number:05d}"
 
 
-# =========================================================
-# CATEGORY MODEL
-# =========================================================
 
+# ====== CATEGORY MODEL ======
 class Category(models.Model):
     status = models.BooleanField(default=True)
     name = models.CharField(max_length=255)
@@ -194,10 +190,8 @@ class Category(models.Model):
         return self.name
 
 
-# =========================================================
-# YEAR MODEL
-# =========================================================
 
+# ====== YEAR MODEL ======
 class Year(models.Model):
     status = models.BooleanField(default=True)
     year = models.CharField(max_length=255)
@@ -213,10 +207,8 @@ class Year(models.Model):
         return self.year
 
 
-# =========================================================
-# LICENSE MODEL
-# =========================================================
 
+# ====== LICENSE MODEL ======
 class License(models.Model):
     status = models.BooleanField(default=True)
 
@@ -241,10 +233,8 @@ class License(models.Model):
         return self.name
 
 
-# =========================================================
-# PRODUCT MODEL
-# =========================================================
-
+ 
+# ====== PRODUCT MODEL ======
 class Product(models.Model):
 
     product_id = models.CharField(
@@ -287,14 +277,14 @@ class Product(models.Model):
         related_name="products",
     )
 
-    # Clean thumbnail for the main product page.
+    # ====== Clean thumbnail for the main product page.
     thumbnail_image = models.ImageField(
         upload_to="uploads/images/product/thumbnails/",
         blank=True,
         null=True,
     )
 
-    # Watermarked preview for the product details page.
+    # ====== Watermarked preview for the product details page.
     preview_image = models.ImageField(
         upload_to="uploads/images/product/previews/",
         blank=True,
@@ -340,10 +330,8 @@ class Product(models.Model):
     def __str__(self):
         return f"{self.product_id} - {self.name}"
 
-    # =====================================================
-    # GENERATE WATERMARK
-    # =====================================================
 
+    # ====== GENERATE WATERMARK ======
     @staticmethod
     def add_watermark(image):
         width, height = image.size
@@ -438,10 +426,8 @@ class Product(models.Model):
 
         image.paste(result)
 
-    # =====================================================
-    # GENERATE CLEAN THUMBNAIL AND WATERMARKED PREVIEW
-    # =====================================================
 
+    # ====== GENERATE CLEAN THUMBNAIL AND WATERMARKED PREVIEW ======
     def generate_preview_images(self):
 
         if not self.original_image:
@@ -458,10 +444,8 @@ class Product(models.Model):
 
         stem = Path(self.original_image.name).stem
 
-        # -------------------------------------------------
-        # 1. CLEAN THUMBNAIL
-        # -------------------------------------------------
 
+        # ====== 1. CLEAN THUMBNAIL ======
         thumbnail = clean_image.copy()
 
         thumbnail.thumbnail(
@@ -478,10 +462,8 @@ class Product(models.Model):
             optimize=True,
         )
 
-        # -------------------------------------------------
-        # 2. WATERMARKED PREVIEW
-        # -------------------------------------------------
 
+        # ====== 2. WATERMARKED PREVIEW ======
         preview = clean_image.copy()
 
         preview.thumbnail(
@@ -500,10 +482,8 @@ class Product(models.Model):
             optimize=True,
         )
 
-        # -------------------------------------------------
-        # 3. SAVE GENERATED FILES
-        # -------------------------------------------------
 
+        # ====== 3. SAVE GENERATED FILES ======
         self.thumbnail_image.save(
             f"{stem}_thumbnail.jpg",
             ContentFile(thumbnail_buffer.getvalue()),
@@ -521,10 +501,8 @@ class Product(models.Model):
         thumbnail.close()
         preview.close()
 
-    # =====================================================
-    # AUTOMATIC SAVE
-    # =====================================================
-
+  
+    # ====== AUTOMATIC SAVE ======
     def save(self, *args, **kwargs):
 
         # Detect a newly uploaded original image.

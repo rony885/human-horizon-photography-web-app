@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
 import styled from "styled-components";
+import { Link } from "react-router";
 import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
+
 import { useCartContext } from "../../context/CartContext";
+// import { useProductContext } from "../../context/ProductContext";
 
 // const wishlistData = [
 //   {
@@ -28,6 +30,9 @@ import { useCartContext } from "../../context/CartContext";
 const Wishlist = () => {
   const { wishlist, removeWishlist, addToCart, clearWishlist } =
     useCartContext();
+
+  // data fetching
+  // const { license, fetchLicense } = useProductContext();
   const [selectedLicenses, setSelectedLicenses] = useState({});
 
   return (
@@ -74,13 +79,20 @@ const Wishlist = () => {
               <div className="d-flex flex-column align-items-start">
                 <div className="d-flex align-items-start gap-3">
                   <img
-                    src={item.image}
+                    // src={item.image}
+                    src={
+                      item.image ||
+                      item.thumbnail_image ||
+                      item.preview_image ||
+                      ""
+                    }
                     alt="Wishlist"
                     className="wishlist-item-img rounded-3 flex-shrink-0"
                   />
 
                   <div className="pt-1">
-                    <p className="fw-semibold item-id mb-0">{item.title}</p>
+                    {/* <p className="fw-semibold item-id mb-0">{item.title}</p> */}
+                    <p className="fw-semibold item-id mb-0">{item.name}</p>
                     <p className="item-format mb-0">{item.assetId || "N/A"}</p>
                     <p className="item-format mb-0">JPG</p>
                   </div>
@@ -90,38 +102,6 @@ const Wishlist = () => {
                   <div className="license-label mb-1">License</div>
 
                   <div className="select-wrapper">
-                    {/* <select
-                      className="form-select custom-select"
-                      defaultValue="standard"
-                    >
-                      <option value="standard">Standard</option>
-                      <option value="extended">Enhanced</option>
-                    </select> */}
-                    {/* <select
-                      className="form-select custom-select"
-                      value={selectedLicenses[item.id] || "standard"}
-                      onChange={(e) => {
-                        setSelectedLicenses((prev) => ({
-                          ...prev,
-                          [item.id]: e.target.value,
-                        }));
-                      }}
-                    >
-                      <option value="free">
-                        {item.licenses?.free?.name || "Free License"} - ৳
-                        {item.licenses?.free?.price ?? 0}
-                      </option>
-
-                      <option value="standard">
-                        {item.licenses?.standard?.name || "Standard License"} -
-                        ৳{item.licenses?.standard?.price ?? 0}
-                      </option>
-
-                      <option value="enhanced">
-                        {item.licenses?.enhanced?.name || "Enhanced License"} -
-                        ৳{item.licenses?.enhanced?.price ?? 0}
-                      </option>
-                    </select> */}
                     <select
                       className="form-select custom-select"
                       value={selectedLicenses[item.id] || "standard"}

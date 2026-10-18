@@ -1,86 +1,87 @@
 const CartReducer = (state, action) => {
   // ADD TO CART
-  // if (action.type === "ADD_TO_CART") {
-  //   const { product } = action.payload;
-
-  //   // const exist = state.cart.find(
-  //   //   (item) => Number(item.productId) === Number(product.id),
-  //   // );
-  //   const exist = state.cart.find((item) => item.id === product.id);
-
-  //   // Already in cart
-  //   if (exist) {
-  //     return state;
-  //   }
-
-  //   const cartProduct = {
-  //     id: product.id,
-  //     productId: product.id,
-  //     title: product.title,
-  //     image: product.image,
-
-  //     // IMPORTANT
-  //     assetId: product.assetId || "",
-
-  //     formats: product.formats || [],
-  //     amount: 1,
-
-  //     premium: product.premium || false,
-  //     premiumText: product.premiumText || "",
-
-  //     licenses: product.licenses || {},
-
-  //     license: "standard",
-  //     licenseName: product.licenses?.standard?.name || "Standard License",
-
-  //     price: Number(product.licenses?.standard?.price || 0),
-  //   };
-
-  //   return {
-  //     ...state,
-  //     cart: [...state.cart, cartProduct],
-  //   };
-  // }
-
-  // ADD TO CART
   if (action.type === "ADD_TO_CART") {
-    const { product, license = "standard" } = action.payload;
+    const { product } = action.payload;
 
-    // Check whether the product already exists in the cart
-    const exist = state.cart.find(
-      (item) => Number(item.productId) === Number(product.id),
-    );
+    // const exist = state.cart.find(
+    //   (item) => Number(item.productId) === Number(product.id),
+    // );
+    const exist = state.cart.find((item) => item.id === product.id);
 
+    // Already in cart
     if (exist) {
       return state;
     }
 
-    // Get the selected license details
-    const selectedLicense =
-      product.licenses?.[license] || product.licenses?.standard || {};
+    // const cartProduct = {
+    //   id: product.id,
+    //   productId: product.id,
+    //   title: product.title,
+    //   image: product.image,
 
-    const selectedLicenseKey = product.licenses?.[license]
-      ? license
-      : "standard";
+    //   // IMPORTANT
+    //   assetId: product.assetId || "",
+
+    //   formats: product.formats || [],
+    //   amount: 1,
+
+    //   premium: product.premium || false,
+    //   premiumText: product.premiumText || "",
+
+    //   licenses: product.licenses || {},
+
+    //   license: "standard",
+    //   licenseName: product.licenses?.standard?.name || "Standard License",
+
+    //   price: Number(product.licenses?.standard?.price || 0),
+    // };
 
     const cartProduct = {
+      // PRODUCT INFORMATION
+      ...product,
+
       id: product.id,
       productId: product.id,
-      title: product.title,
-      image: product.image,
+
+      // PRODUCT TITLE
+      title: product.name || product.title || "Untitled Product",
+      name: product.name || product.title || "Untitled Product",
+
+      // PRODUCT IMAGES
+      image:
+        product.thumbnail_image || product.preview_image || product.image || "",
+
+      thumbnail_image: product.thumbnail_image || product.image || "",
+
+      preview_image:
+        product.preview_image || product.thumbnail_image || product.image || "",
+
+      // ASSET INFORMATION
       assetId: product.assetId || "",
+
+      // CATEGORY
+      category_id: product.category_id ?? product.category?.id ?? null,
+      category: product.category || null,
+
+      // YEAR
+      year_id: product.year_id ?? product.year?.id ?? null,
+      year: product.year || null,
+
+      // PRODUCT FORMATS
       formats: product.formats || [],
-      amount: 1,
-      premium: product.premium || false,
+
+      // PREMIUM INFORMATION
+      premium: product.premium ?? false,
       premiumText: product.premiumText || "",
+
+      // LICENSE INFORMATION
       licenses: product.licenses || {},
+      license: "standard",
+      licenseName: product.licenses?.standard?.name || "Standard License",
+      price: Number(product.licenses?.standard?.price || 0),
 
-      // Save the selected license
-      license: selectedLicenseKey,
-      licenseName: selectedLicense.name || "Standard License",
-
-      // Save the selected license price
-      price: Number(selectedLicense.price || 0),
+      // QUANTITY
+      amount: 1,
     };
 
     return {
@@ -222,6 +223,7 @@ const CartReducer = (state, action) => {
   //     ],
   //   };
   // }
+
   if (action.type === "ADD_TO_WISHLIST") {
     const exist = state.wishlist.find((item) => item.id === action.payload.id);
 
@@ -260,3 +262,287 @@ const CartReducer = (state, action) => {
 };
 
 export default CartReducer;
+
+// const CartReducer = (state, action) => {
+//   switch (action.type) {
+//     // ADD TO CART
+//     case "ADD_TO_CART": {
+//       const { product } = action.payload;
+
+//       // CHECK PRODUCT
+//       if (!product || !product.id) {
+//         return state;
+//       }
+
+//       // CHECK IF PRODUCT ALREADY EXISTS
+//       const existingProduct = state.cart.find(
+//         (item) => item.id === product.id
+//       );
+
+//       if (existingProduct) {
+//         return state;
+//       }
+
+//       // CART PRODUCT
+//       const cartProduct = {
+//         // PRODUCT INFORMATION
+//         ...product,
+
+//         id: product.id,
+//         productId: product.id,
+
+//         // PRODUCT TITLE
+//         title: product.name || product.title || "Untitled Product",
+//         name: product.name || product.title || "Untitled Product",
+
+//         // PRODUCT IMAGES
+//         image:
+//           product.thumbnail_image ||
+//           product.preview_image ||
+//           product.image ||
+//           "",
+
+//         thumbnail_image:
+//           product.thumbnail_image ||
+//           product.image ||
+//           "",
+
+//         preview_image:
+//           product.preview_image ||
+//           product.thumbnail_image ||
+//           product.image ||
+//           "",
+
+//         // ASSET INFORMATION
+//         assetId: product.assetId || "",
+
+//         // CATEGORY
+//         category_id:
+//           product.category_id ?? product.category?.id ?? null,
+//         category: product.category || null,
+
+//         // YEAR
+//         year_id: product.year_id ?? product.year?.id ?? null,
+//         year: product.year || null,
+
+//         // PRODUCT FORMATS
+//         formats: product.formats || [],
+
+//         // PREMIUM INFORMATION
+//         premium: product.premium ?? false,
+//         premiumText: product.premiumText || "",
+
+//         // LICENSE INFORMATION
+//         licenses: product.licenses || {},
+//         license: "standard",
+//         licenseName:
+//           product.licenses?.standard?.name || "Standard License",
+//         price: Number(product.licenses?.standard?.price || 0),
+
+//         // QUANTITY
+//         amount: 1,
+//       };
+
+//       return {
+//         ...state,
+//         cart: [...state.cart, cartProduct],
+//       };
+//     }
+
+//     // REMOVE ITEM FROM CART
+//     case "REMOVE_ITEM": {
+//       return {
+//         ...state,
+//         cart: state.cart.filter(
+//           (item) => item.id !== action.payload
+//         ),
+//       };
+//     }
+
+//     // CLEAR CART
+//     case "CLEAR_CART": {
+//       return {
+//         ...state,
+//         cart: [],
+//         total_item: 0,
+//         total_price: 0,
+//       };
+//     }
+
+//     // CHANGE LICENSE
+//     case "CHANGE_LICENSE": {
+//       const { id, license } = action.payload;
+
+//       const updatedCart = state.cart.map((item) => {
+//         if (item.id === id) {
+//           const selectedLicense = item.licenses?.[license];
+
+//           return {
+//             ...item,
+//             license,
+//             licenseName:
+//               selectedLicense?.name ||
+//               `${license.charAt(0).toUpperCase()}${license.slice(1)} License`,
+//             price: Number(selectedLicense?.price || 0),
+//           };
+//         }
+
+//         return item;
+//       });
+
+//       return {
+//         ...state,
+//         cart: updatedCart,
+//       };
+//     }
+
+//     // INCREMENT ITEM QUANTITY
+//     case "INCREMENT": {
+//       const updatedCart = state.cart.map((item) => {
+//         if (item.id === action.payload) {
+//           if (item.amount >= 10) {
+//             return item;
+//           }
+
+//           return {
+//             ...item,
+//             amount: item.amount + 1,
+//           };
+//         }
+
+//         return item;
+//       });
+
+//       return {
+//         ...state,
+//         cart: updatedCart,
+//       };
+//     }
+
+//     // DECREMENT ITEM QUANTITY
+//     case "DECREMENT": {
+//       const updatedCart = state.cart.map((item) => {
+//         if (item.id === action.payload) {
+//           return {
+//             ...item,
+//             amount: Math.max(1, item.amount - 1),
+//           };
+//         }
+
+//         return item;
+//       });
+
+//       return {
+//         ...state,
+//         cart: updatedCart,
+//       };
+//     }
+
+//     // CALCULATE TOTAL ITEMS
+//     case "CART_TOTAL_ITEM": {
+//       const total_item = state.cart.reduce(
+//         (total, item) => total + Number(item.amount || 0),
+//         0
+//       );
+
+//       return {
+//         ...state,
+//         total_item,
+//       };
+//     }
+
+//     // CALCULATE TOTAL PRICE
+//     case "CART_TOTAL_PRICE": {
+//       const total_price = state.cart.reduce(
+//         (total, item) =>
+//           total +
+//           Number(item.price || 0) * Number(item.amount || 0),
+//         0
+//       );
+
+//       return {
+//         ...state,
+//         total_price,
+//       };
+//     }
+
+//     // ADD TO WISHLIST
+//     case "ADD_TO_WISHLIST": {
+//       const product = action.payload;
+
+//       if (!product || !product.id) {
+//         return state;
+//       }
+
+//       const existingProduct = state.wishlist.some(
+//         (item) => item.id === product.id
+//       );
+
+//       if (existingProduct) {
+//         return state;
+//       }
+
+//       const wishlistProduct = {
+//         ...product,
+
+//         // PRODUCT TITLE
+//         title: product.name || product.title || "Untitled Product",
+
+//         // PRODUCT IMAGES
+//         image:
+//           product.thumbnail_image ||
+//           product.preview_image ||
+//           product.image ||
+//           "",
+
+//         thumbnail_image:
+//           product.thumbnail_image ||
+//           product.image ||
+//           "",
+
+//         preview_image:
+//           product.preview_image ||
+//           product.thumbnail_image ||
+//           product.image ||
+//           "",
+
+//         // CATEGORY AND YEAR
+//         category_id:
+//           product.category_id ?? product.category?.id ?? null,
+//         year_id: product.year_id ?? product.year?.id ?? null,
+
+//         // WISHLIST DATE
+//         addedAt: new Date().toISOString(),
+//       };
+
+//       return {
+//         ...state,
+//         wishlist: [...state.wishlist, wishlistProduct],
+//       };
+//     }
+
+//     // REMOVE FROM WISHLIST
+//     case "REMOVE_WISHLIST_WISHLIST": {
+//       return {
+//         ...state,
+//         wishlist: state.wishlist.filter(
+//           (item) => item.id !== action.payload
+//         ),
+//       };
+//     }
+
+//     // CLEAR WISHLIST
+//     case "CLEAR_WISHLIST": {
+//       return {
+//         ...state,
+//         wishlist: [],
+//       };
+//     }
+
+//     // DEFAULT
+//     default:
+//       return state;
+//   }
+// };
+
+// export default CartReducer;

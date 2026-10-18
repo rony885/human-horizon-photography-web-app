@@ -22,9 +22,10 @@ const initialState = {
   // Product module
   category: [],
   unpaginate_category: [],
-
   year: [],
   unpaginate_year: [],
+  license: [],
+  unpaginate_license: [],
 
   product: [],
   unpaginate_product: [],
@@ -65,9 +66,10 @@ const ProductContext = ({ children }) => {
     // Product module
     category: `${process.env.REACT_APP_BASE_URL}/product_api/category/`,
     unpaginateCategory: `${process.env.REACT_APP_BASE_URL}/product_api/unpaginate_category/`,
-
     year: `${process.env.REACT_APP_BASE_URL}/product_api/year/`,
     unpaginateYear: `${process.env.REACT_APP_BASE_URL}/product_api/unpaginate_year/`,
+    license: `${process.env.REACT_APP_BASE_URL}/product_api/license/`,
+    unpaginateLicense: `${process.env.REACT_APP_BASE_URL}/product_api/unpaginate_license/`,
 
     product: `${process.env.REACT_APP_BASE_URL}/product_api/product/`,
     unpaginateProduct: `${process.env.REACT_APP_BASE_URL}/product_api/unpaginate_product/`,
@@ -135,7 +137,7 @@ const ProductContext = ({ children }) => {
     [fetchData, urls.unpaginateCategory],
   );
 
-   const fetchYear = useCallback(
+  const fetchYear = useCallback(
     () => fetchData(urls.year, "SET_API_YEAR"),
     [fetchData, urls.year],
   );
@@ -143,6 +145,16 @@ const ProductContext = ({ children }) => {
   const fetchUnpaginateYear = useCallback(
     () => fetchData(urls.unpaginateYear, "SET_API_UNPAGINATE_YEAR"),
     [fetchData, urls.unpaginateYear],
+  );
+
+  const fetchLicense = useCallback(
+    () => fetchData(urls.license, "SET_API_LICENSE"),
+    [fetchData, urls.license],
+  );
+
+  const fetchUnpaginateLicense = useCallback(
+    () => fetchData(urls.unpaginateLicense, "SET_API_UNPAGINATE_LICENSE"),
+    [fetchData, urls.unpaginateLicense],
   );
 
   const fetchProduct = useCallback(
@@ -253,6 +265,8 @@ const ProductContext = ({ children }) => {
         fetchUnpaginateCategory,
         fetchYear,
         fetchUnpaginateYear,
+        fetchLicense,
+        fetchUnpaginateLicense,
 
         fetchProduct,
         fetchUnpaginateProduct,

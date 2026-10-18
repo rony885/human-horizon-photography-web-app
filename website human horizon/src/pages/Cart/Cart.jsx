@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router";
 import styled from "styled-components";
@@ -63,13 +64,13 @@ const Cart = () => {
                     <div className="d-flex align-items-start gap-3">
                       <img
                         src={item.image}
-                        alt={item.title}
+                        alt={item.name}
                         className="cart-item-img rounded-3"
                       />
 
                       <div className="pt-1">
                         <p className="fw-semibold text-dark small mb-1">
-                          {item.title}
+                          {item.name}
                         </p>
 
                         <p className="text-secondary small mb-0">

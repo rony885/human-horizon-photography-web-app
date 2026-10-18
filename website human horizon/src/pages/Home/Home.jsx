@@ -7,11 +7,12 @@ import Tooltip from "react-bootstrap/Tooltip";
 
 import { useProductContext } from "../../context/ProductContext.jsx";
 // import photosArray from "../../DataJS/photos.js";
-import categoriesArray from "../../DataJS/categories.js";
-import yearsArray from "../../DataJS/year.js";
+// import categoriesArray from "../../DataJS/categories.js";
+// import yearsArray from "../../DataJS/year.js";
 import { useCartContext } from "../../context/CartContext.jsx";
 
 const Home = () => {
+  // CART & WISHLIST
   const {
     cart,
     addToCart,
@@ -22,14 +23,19 @@ const Home = () => {
   } = useCartContext();
 
   // data fetching
-  const { product, fetchProduct } = useProductContext();
+  const {
+    product,
+    unpaginate_category,
+    year,
+
+    fetchProduct,
+    fetchUnpaginateCategory,
+    fetchYear,
+  } = useProductContext();
 
   const galleryRef = useRef(null);
 
-  const [photos, setPhotos] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [years, setYears] = useState([]);
-
+  // FILTER STATE
   const [selectedCategory, setSelectedCategory] = useState(
     () => localStorage.getItem("selectedCategory") || "All",
   );
@@ -39,29 +45,25 @@ const Home = () => {
   );
 
   useEffect(() => {
-    // setPhotos(photosArray);
     fetchProduct();
-    setCategories(categoriesArray);
-    setYears(yearsArray);
-  }, [fetchProduct]);
-
-  useEffect(() => {
-    setPhotos(product);
-  }, [product]);
+    fetchUnpaginateCategory();
+    fetchYear();
+  }, [fetchProduct, fetchUnpaginateCategory, fetchYear]);
 
   useEffect(() => {
     localStorage.setItem("selectedCategory", selectedCategory);
     localStorage.setItem("selectedYear", selectedYear);
   }, [selectedCategory, selectedYear]);
 
-  const filteredPhotos = photos.filter((photo) => {
-  // const filteredPhotos = product.filter((photo) => {
+  const filteredPhotos = product.filter((photo) => {
     const categoryMatch =
       selectedCategory === "All" ||
       Number(photo.categoriesId) === Number(selectedCategory);
 
+    // const yearMatch =
+    //   selectedYear === "All" || Number(photo.yearId) === Number(selectedYear);
     const yearMatch =
-      selectedYear === "All" || Number(photo.yearId) === Number(selectedYear);
+      selectedYear === "All" || Number(photo.year_id) === Number(selectedYear);
 
     return categoryMatch && yearMatch;
   });
@@ -227,7 +229,7 @@ const Home = () => {
                 ALL
               </button>
 
-              {categories.map((category) => (
+              {unpaginate_category.map((category) => (
                 <button
                   type="button"
                   key={category.id}
@@ -256,16 +258,16 @@ const Home = () => {
                 ALL
               </button>
 
-              {years.map((year) => (
+              {year.map((yr) => (
                 <button
                   type="button"
-                  key={year.id}
+                  key={yr.id}
                   className={
-                    Number(selectedYear) === Number(year.id) ? "active" : ""
+                    Number(selectedYear) === Number(yr.id) ? "active" : ""
                   }
-                  onClick={() => setSelectedYear(year.id)}
+                  onClick={() => setSelectedYear(yr.id)}
                 >
-                  {year.year}
+                  {yr.year}
                 </button>
               ))}
             </div>
@@ -284,11 +286,11 @@ const Home = () => {
 
         <div className="photos-box iso-call" ref={galleryRef}>
           {filteredPhotos.map((photo) => {
-            const photoCategory = categories.find(
+            const photoCategory = unpaginate_category.find(
               (category) => Number(category.id) === Number(photo.categoriesId),
             );
 
-            const photoYear = years.find(
+            const photoYear = year.find(
               (year) => Number(year.id) === Number(photo.yearId),
             );
 
@@ -318,7 +320,7 @@ const Home = () => {
                 <div className="hover-box">
                   <div className="inner-hover">
                     <div className="title-post">
-                      <h2>{photo.title}</h2>
+                      <h2>{photo.name}</h2>
                       <span className="text-capitalize">
                         {photoCategory ? photoCategory.categories : ""}
                       </span>

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { useProductContext } from "../../context/ProductContext.jsx";
 // import photosArray from "../../DataJS/photos.js";
-import categoriesArray from "../../DataJS/categories.js";
+// import categoriesArray from "../../DataJS/categories.js";
 // import yearsArray from "../../DataJS/year.js";
 import { useCartContext } from "../../context/CartContext.jsx";
 
@@ -19,13 +19,19 @@ const ProductDetails = () => {
   } = useCartContext();
 
   // data fetching
-  const { product, fetchProduct } = useProductContext();
+  const { product, license, fetchProduct, fetchLicense } = useProductContext();
+
+  useEffect(() => {
+    fetchProduct();
+    fetchLicense();
+  }, [fetchLicense, fetchProduct]);
 
   const [photos, setPhotos] = useState([]);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   // const [years, setYears] = useState([]);
 
-  const [selectedLicense, setSelectedLicense] = useState("standard");
+  // const [selectedLicense, setSelectedLicense] = useState("standard");
+  const [selectedLicense, setSelectedLicense] = useState("2");
   const [showPreview, setShowPreview] = useState(false);
   const { id } = useParams();
 
@@ -36,24 +42,26 @@ const ProductDetails = () => {
   console.log("Product ID:", id);
   console.log("From:", from);
 
-  useEffect(() => {
-    // setPhotos(photosArray);
-    fetchProduct();
-    setCategories(categoriesArray);
-    // setYears(yearsArray);
-  }, [fetchProduct]);
+  // Find the selected license from the API
+  const selectedLicenseData = license?.find(
+    (item) => String(item.id) === selectedLicense,
+  );
 
   useEffect(() => {
+    // setPhotos(photosArray);
     setPhotos(product && product);
+    // setSelectedLicense(license && license);
+    // setCategories(categoriesArray);
+    // setYears(yearsArray);
   }, [product]);
 
   const findProductDetails = photos.find(
     (productItem) => productItem.id === parseInt(id),
   );
 
-  const findCategory = categories.find(
-    (categoryItem) => categoryItem.id === findProductDetails?.categoriesId,
-  );
+  // const findCategory = categories.find(
+  //   (categoryItem) => categoryItem.id === findProductDetails?.categoriesId,
+  // );
 
   // const imageUrl =
   //   "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=2000&auto=format&fit=crop";
@@ -111,10 +119,8 @@ const ProductDetails = () => {
                   <img
                     // src={imageUrl}
                     // src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=2000&auto=format&fit=crop"
-                    // src={findProductDetails && findProductDetails.preview_image}
-                    // alt="Young beauties picking flowers in the courtyard"
-                    src={findProductDetails?.preview_image}
-                    alt={findProductDetails?.title || "Watermarked preview"}
+                    src={findProductDetails && findProductDetails.preview_image}
+                    alt="Young beauties picking flowers in the courtyard"
                     className="w-100 h-100"
                     style={{
                       objectFit: "inherit",
@@ -130,7 +136,8 @@ const ProductDetails = () => {
                 <div className="d-flex align-items-center justify-content-between mt-3">
                   <div className="bg-light px-3 py-2 rounded small fw-semibold">
                     <i className="fa-solid fa-gem me-1"></i>
-                    Premium Content by Human & Horizon
+                    {/* Premium Content by Human & Horizon */}
+                    {findProductDetails && findProductDetails.premiumText}
                   </div>
 
                   <div className="d-flex gap-2">
@@ -166,7 +173,7 @@ const ProductDetails = () => {
               </div>
 
               <div className="col-lg-5 col-md-12">
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label className="form-label fw-bold small mb-2">
                     Select License
                   </label>
@@ -178,11 +185,12 @@ const ProductDetails = () => {
                   >
                     <option value="standard">Standard</option>
                     <option value="enhanced">Enhanced</option>
-                    {/* <option value="free">Free</option> */}
+                    <option value="enhanced">Free</option>
                   </select>
 
                   <h4 className="small fw-bold my-3">
-                    {/* <span className="fw-bold fs-5">৳</span> */}$
+                    <span className="fw-bold fs-5">৳</span>
+                    $
                     {findProductDetails?.licenses?.[selectedLicense]?.price ||
                       0}
                   </h4>
@@ -209,6 +217,41 @@ const ProductDetails = () => {
                       </p>
                     )}
                   </div>
+                </div> */}
+
+                <div className="mb-3">
+                  <label className="form-label fw-bold small mb-2">
+                    Select License
+                  </label>
+
+                  <select
+                    className="form-select license-select"
+                    value={selectedLicense}
+                    onChange={(e) => setSelectedLicense(e.target.value)}
+                  >
+                    {Array.isArray(license) &&
+                      license
+                        .filter((item) => item.status)
+                        .map((item) => (
+                          <option key={item.id} value={String(item.id)}>
+                            {item.name}
+                          </option>
+                        ))}
+                  </select>
+
+                  <h4 className="small fw-bold my-3">
+                    $
+                    {selectedLicenseData
+                      ? Number(selectedLicenseData.price).toFixed(2)
+                      : "0.00"}
+                  </h4>
+
+                  <div className="mt-2">
+                    <p className="small text-secondary mb-0">
+                      {selectedLicenseData?.description ||
+                        "License description is not available."}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Add To Cart */}
@@ -234,7 +277,6 @@ const ProductDetails = () => {
                   //     addToCart(findProductDetails.id, 1, findProductDetails);
                   //   }
                   // }}
-
                   onClick={(e) => {
                     e.preventDefault();
 
@@ -274,9 +316,10 @@ const ProductDetails = () => {
                   className="small text-secondary mb-4"
                   style={{ textAlign: "justify" }}
                 >
-                  Offset images aren't included in image subscriptions, FLEX
+                  {/* Offset images aren't included in image subscriptions, FLEX
                   subscriptions, unlimited downloads subscriptions or on-demand
-                  packs. You can license and pay for them separately.
+                  packs. You can license and pay for them separately. */}
+                  {findProductDetails && findProductDetails.descriptions}
                 </p>
 
                 <div className="image-details">
@@ -289,7 +332,8 @@ const ProductDetails = () => {
                   </div>
 
                   <div className="small fw-semibold mb-2">
-                    {findProductDetails && findProductDetails.title}
+                    {/* {findProductDetails && findProductDetails.title} */}
+                    {findProductDetails && findProductDetails.name}
                     <i className="fa-regular fa-copy ms-1 text-secondary"></i>
                   </div>
 
@@ -301,7 +345,8 @@ const ProductDetails = () => {
                   <div className="small">
                     <span className="text-secondary">Categories:&nbsp;</span>
                     <Link to="#" className="text-dark text-capitalize">
-                      {findCategory?.categories}
+                      {/* {findCategory?.categories} */}
+                      {findProductDetails && findProductDetails.category.name}
                     </Link>
                   </div>
                 </div>
@@ -327,12 +372,8 @@ const ProductDetails = () => {
 
           <img
             // src={imageUrl}
-            // src={findProductDetails && findProductDetails.preview_image}
-            // alt="Full preview"
-            // className="img-fluid"
-            // onClick={(e) => e.stopPropagation()}
-            src={findProductDetails?.preview_image}
-            alt="Watermarked full preview"
+            src={findProductDetails && findProductDetails.preview_image}
+            alt="Full preview"
             className="img-fluid"
             onClick={(e) => e.stopPropagation()}
           />
