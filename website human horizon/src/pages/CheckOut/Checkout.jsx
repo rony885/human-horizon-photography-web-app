@@ -228,7 +228,8 @@ const Checkout = () => {
                   ) : (
                     <tr>
                       <td colSpan="2" className="text-center text-danger py-4">
-                        Your order is empty
+                        {/* Your order is empty */}
+                        No item in cart...
                       </td>
                     </tr>
                   )}
@@ -248,17 +249,6 @@ const Checkout = () => {
                   {/* <tr>
                     <td className="fw-semibold text-dark px-2 py-2">
                       Discount
-                    </td>
-
-                    <td className="fw-semibold text-end px-2 py-2 text-nowrap">
-                      <span className="fw-bold fs-5">৳</span>0
-                    </td>
-                  </tr> */}
-
-                  {/* DELIVERY */}
-                  {/* <tr>
-                    <td className="fw-semibold text-dark px-2 py-2">
-                      Delivery Charge
                     </td>
 
                     <td className="fw-semibold text-end px-2 py-2 text-nowrap">

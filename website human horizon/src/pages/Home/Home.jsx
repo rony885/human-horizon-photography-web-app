@@ -228,13 +228,16 @@ const Home = () => {
   }, [filteredPhotos]);
 
   const activeLicenses = Array.isArray(license)
-    ? license.filter((item) => item.status)
+    ? license.filter(
+        (item) =>
+          item.status === true || item.status === 1 || item.status === "true",
+      )
     : [];
 
   const standardLicense =
-    activeLicenses.find(
-      (item) => item.name?.trim().toLowerCase() === "standard",
-    ) || activeLicenses[0];
+    activeLicenses.find((item) =>
+      item.name?.trim().toLowerCase().includes("standard"),
+    ) || null;
 
   return (
     <Wrapper>
@@ -462,25 +465,29 @@ const Home = () => {
                         //     addToCart(photo.id, 1, photo);
                         //   }
                         // }}
+
                         onClick={(e) => {
                           e.preventDefault();
 
                           if (isInCart) {
                             removeCart(photo.id);
-                          } else {
-                            if (!standardLicense) {
-                              alert("No active license is available.");
-                              return;
-                            }
-
-                            addToCart(
-                              photo.id,
-                              1,
-                              photo,
-                              standardLicense,
-                              activeLicenses,
-                            );
+                            return;
                           }
+
+                          if (!standardLicense) {
+                            alert(
+                              "Standard license is not available. Please try again.",
+                            );
+                            return;
+                          }
+
+                          addToCart(
+                            photo.id,
+                            1,
+                            photo,
+                            standardLicense,
+                            activeLicenses,
+                          );
                         }}
                       >
                         <OverlayTrigger

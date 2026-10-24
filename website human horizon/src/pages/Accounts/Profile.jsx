@@ -89,21 +89,31 @@ const Profile = ({ c_user }) => {
             <span>Profle</span>
           </div>
 
-          {/* Profile Header */}
           <div className="profile-section">
             <div className="profile-avatar">
               <img
-                src="https://i.pravatar.cc/150?img=12"
-                alt="Rony71 Profile"
+                // src="https://i.pravatar.cc/150?img=12"
+                src={
+                  c_user.image &&
+                  `${process.env.REACT_APP_BASE_URL}${c_user.image.replace(
+                    "server/",
+                    "",
+                  )}`
+                }
+                alt="Profile Imagee"
               />
             </div>
 
             <div className="profile-info">
-              <h2>Rony 71</h2>
+              {/* <h2>Rony 71</h2> */}
+              <h2>{c_user && c_user.name}</h2>
 
-              <p>rony71@gmail.com</p>
+              {/* <p>rony71@gmail.com</p> */}
+              <p>{c_user && c_user.eemmaaiill}</p>
 
-              <Link className="btn-profile-update">Profile update</Link>
+              <Link className="btn-profile-update" to="/update-profile">
+                Profile update
+              </Link>
             </div>
           </div>
 

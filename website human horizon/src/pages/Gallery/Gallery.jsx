@@ -8,8 +8,9 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 // import categoriesArray from "../../DataJS/categories.js";
 // import yearsArray from "../../DataJS/year.js";
 
-import photosArray from "../../DataJS/photos.js";
+// import photosArray from "../../DataJS/photos.js";
 import { useCartContext } from "../../context/CartContext.jsx";
+import { useProductContext } from "../../context/ProductContext.jsx";
 
 const Gallery = () => {
   const {
@@ -21,18 +22,37 @@ const Gallery = () => {
     wishlist,
   } = useCartContext();
 
+  // data fetching
+  const {
+    product,
+    unpaginate_category,
+    year,
+    license,
+    fetchProduct,
+    fetchUnpaginateCategory,
+    fetchYear,
+    fetchLicense,
+  } = useProductContext();
+
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [photos, setPhotos] = useState([]);
 
   // const [categories, setCategories] = useState([]);
-  // const [years, setYears] = useState([]);
 
   useEffect(() => {
-    setPhotos(photosArray);
+    fetchProduct();
+    fetchUnpaginateCategory();
+    fetchYear();
+    fetchLicense();
+  }, [fetchProduct, fetchUnpaginateCategory, fetchYear, fetchLicense]);
+
+  useEffect(() => {
+    // setPhotos(photosArray);
+    setPhotos(product && product);
 
     // setCategories(categoriesArray);
     // setYears(yearsArray);
-  }, []);
+  }, [product, year]);
 
   // OPEN LIGHTBOX
   const openLightbox = (index) => {
@@ -137,7 +157,7 @@ const Gallery = () => {
                   <div className="photo-post position-relative overflow-hidden rounded-4">
                     <img
                       src={item.thumbnail_image}
-                      alt={item.alt || item.title || "Gallery Image"}
+                      alt={item.alt || item.name || "Gallery Image"}
                       className="w-100 d-block gallery-image"
                     />
 
@@ -215,16 +235,22 @@ const Gallery = () => {
                         </OverlayTrigger>
                       </div>
 
-                      <h3 className="text-white fs-5 fw-semibold m-0">
-                        <Link
-                          className="text-white text-capitalize"
-                          to={`/image-details/${item.id}`}
-                          state={{ from: "gallery" }}
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          {item.title}
-                        </Link>
-                      </h3>
+                      <div className="gallery-text d-flex flex-column align-items-start">
+                        <h3 className="text-white fs-6 fw-semibold m-0">
+                          <Link
+                            className="text-white text-capitalize"
+                            to={`/image-details/${item.id}`}
+                            state={{ from: "gallery" }}
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            {item.name}
+                          </Link>
+                        </h3>
+
+                        <p className="text-white mb-0 mt-1">
+                          {item.year?.year || ""}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -270,10 +296,10 @@ const Gallery = () => {
           >
             <div className="image-wrapper d-flex align-items-center justify-content-center">
               <img
-                src={photos[selectedIndex].main_image}
+                src={photos[selectedIndex].thumbnail_image}
                 alt={
                   photos[selectedIndex].alt ||
-                  photos[selectedIndex].title ||
+                  photos[selectedIndex].name ||
                   "Gallery Image"
                 }
                 className="lightbox-image d-block rounded-4"
@@ -282,7 +308,7 @@ const Gallery = () => {
 
             <div className="lightbox-info w-100 d-flex align-items-center justify-content-between gap-3 mt-3 px-1">
               <p className="lightbox-caption text-white m-0 fw-medium text-capitalize">
-                {photos[selectedIndex].title}
+                {photos[selectedIndex].name}
               </p>
 
               <span className="image-counter text-white rounded-pill px-3 py-2">

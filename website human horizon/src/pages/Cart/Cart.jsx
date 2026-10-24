@@ -1,8 +1,8 @@
-
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router";
 import styled from "styled-components";
 import { useCartContext } from "../../context/CartContext";
+import { useProductContext } from "../../context/ProductContext.jsx";
 
 const Cart = () => {
   const {
@@ -13,6 +13,22 @@ const Cart = () => {
     clearCart,
     changeLicense,
   } = useCartContext();
+
+  const { license, fetchLicense } = useProductContext();
+
+  useEffect(() => {
+    fetchLicense();
+  }, [fetchLicense]);
+
+  const licenses = Array.isArray(license)
+    ? license.filter(
+        (item) =>
+          item.status === true ||
+          item.status === 1 ||
+          item.status === "1" ||
+          item.status === "true",
+      )
+    : [];
 
   return (
     <Wrapper>
@@ -95,7 +111,7 @@ const Cart = () => {
                       <div className="small text-dark mb-2">License</div>
 
                       <div className="select-wrapper">
-                        <select
+                        {/* <select
                           className="form-select custom-select"
                           value={item.license || "standard"}
                           onChange={(e) =>
@@ -105,6 +121,27 @@ const Cart = () => {
                           <option value="standard">Standard</option>
                           <option value="enhanced">Enhanced</option>
                           <option value="free">Free</option>
+                        </select> */}
+                        <select
+                          className="form-select custom-select"
+                          value={String(
+                            item.licenseId ??
+                              item.license?.id ??
+                              item.license ??
+                              "",
+                          )}
+                          onChange={(e) =>
+                            changeLicense(item.id, e.target.value)
+                          }
+                        >
+                          {licenses.map((license) => (
+                            <option key={license.id} value={String(license.id)}>
+                              {license.name} — $
+                              {Number(
+                                license.price ?? license.displayed_price ?? 0,
+                              ).toLocaleString("en-US")}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -262,3 +299,4 @@ const Wrapper = styled.section`
 `;
 
 export default Cart;
+
