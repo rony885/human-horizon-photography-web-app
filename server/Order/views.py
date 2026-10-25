@@ -41,3 +41,5 @@ def order_detail_view(request, order_id):
     elif request.method == 'DELETE':
         order.delete()
         return Response({'message': 'Order deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'CustomUser.apps.CustomUserConfig',
     'Product.apps.ProductConfig',
     'Blog.apps.BlogConfig',
+    'Order.apps.OrderConfig',
     'Settings.apps.SettingsConfig',
     'Contact.apps.ContactConfig',
     

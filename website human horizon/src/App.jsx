@@ -121,7 +121,10 @@ function App() {
                   element={<Cart aT={aT} c_user={c_user && c_user.id} />}
                 />
                 <Route path="/Wishlist" element={<Wishlist />} />
-                <Route path="/checkout" element={<Checkout />} />
+                <Route
+                  path="/checkout"
+                  element={<Checkout aT={aT} c_user={c_user && c_user.id} />}
+                />
 
                 <Route path="/registration" element={<Registrations />} />
                 <Route path="/login" element={<Login />} />

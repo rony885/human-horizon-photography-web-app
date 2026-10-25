@@ -129,15 +129,25 @@ const CartProvider = ({ children }) => {
   };
 
   // SAVE + TOTAL
+  // useEffect(() => {
+  //   dispatch({
+  //     type: "CART_TOTAL_ITEM",
+  //   });
+
+  //   dispatch({
+  //     type: "CART_TOTAL_PRICE",
+  //   });
+
+  //   localStorage.setItem("humanHorizonCart", JSON.stringify(state.cart));
+
+  //   localStorage.setItem(
+  //     "humanHorizonWishlist",
+  //     JSON.stringify(state.wishlist),
+  //   );
+  // }, [state.cart, state.wishlist]);
+
+  // SAVE CART + WISHLIST
   useEffect(() => {
-    dispatch({
-      type: "CART_TOTAL_ITEM",
-    });
-
-    dispatch({
-      type: "CART_TOTAL_PRICE",
-    });
-
     localStorage.setItem("humanHorizonCart", JSON.stringify(state.cart));
 
     localStorage.setItem(
