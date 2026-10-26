@@ -23,6 +23,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 
+
+SHURJOPAY_BASE_URL = os.getenv(
+    "SHURJOPAY_BASE_URL",
+    "https://sandbox.shurjopayment.com/api",
+)
+
+SHURJOPAY_USERNAME = os.getenv("SHURJOPAY_USERNAME", "")
+SHURJOPAY_PASSWORD = os.getenv("SHURJOPAY_PASSWORD", "")
+SHURJOPAY_PREFIX = os.getenv("SHURJOPAY_PREFIX", "HH")
+
+SHURJOPAY_RETURN_URL = os.getenv("SHURJOPAY_RETURN_URL", "")
+SHURJOPAY_CANCEL_URL = os.getenv("SHURJOPAY_CANCEL_URL", "")
+
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://localhost:3000",
+)
+
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
