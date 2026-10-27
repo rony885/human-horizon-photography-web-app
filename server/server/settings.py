@@ -25,9 +25,11 @@ load_dotenv(BASE_DIR / ".env")
 
 
 SHURJOPAY_BASE_URL = os.getenv(
-    "SHURJOPAY_BASE_URL",
-    "https://sandbox.shurjopayment.com/api",
+   "SHURJOPAY_BASE_URL",
+   "https://sandbox.shurjopayment.com/api",
 )
+
+SHURJOPAY_CURRENCY = os.getenv("SHURJOPAY_CURRENCY", "BDT")
 
 SHURJOPAY_USERNAME = os.getenv("SHURJOPAY_USERNAME", "")
 SHURJOPAY_PASSWORD = os.getenv("SHURJOPAY_PASSWORD", "")
