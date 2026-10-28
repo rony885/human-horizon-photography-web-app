@@ -23,10 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 
-
 SHURJOPAY_BASE_URL = os.getenv(
-   "SHURJOPAY_BASE_URL",
-   "https://sandbox.shurjopayment.com/api",
+    "SHURJOPAY_BASE_URL",
+    "https://sandbox.shurjopayment.com/api",
 )
 
 SHURJOPAY_CURRENCY = os.getenv("SHURJOPAY_CURRENCY", "BDT")
@@ -42,7 +41,6 @@ FRONTEND_URL = os.getenv(
     "FRONTEND_URL",
     "http://localhost:3000",
 )
-
 
 
 # Quick-start development settings - unsuitable for production
@@ -80,9 +78,9 @@ INSTALLED_APPS = [
     'CustomUser.apps.CustomUserConfig',
     'Product.apps.ProductConfig',
     'Blog.apps.BlogConfig',
-    'Order.apps.OrderConfig',
     'Settings.apps.SettingsConfig',
     'Contact.apps.ContactConfig',
+    'Order.apps.OrderConfig',
     
 ]
 
@@ -193,26 +191,6 @@ CORS_ALLOW_CREDENTIALS = True
 # Replace 'your_app' with the name of your Django app and 'CustomUser' with the name of your custom user model
 AUTH_USER_MODEL = 'CustomUser.CustomUser'
 
-
-# REST_FRAMEWORK = {
-#     # Authentication
-#     "DEFAULT_AUTHENTICATION_CLASSES": [
-#         "rest_framework_simplejwt.authentication.JWTAuthentication",
-#     ],
-
-#     # Filtering, searching, and ordering
-#     "DEFAULT_FILTER_BACKENDS": [
-#         "django_filters.rest_framework.DjangoFilterBackend",
-#         "rest_framework.filters.SearchFilter",
-#         "rest_framework.filters.OrderingFilter",
-#     ],
-
-#     # Pagination
-#     "DEFAULT_PAGINATION_CLASS": (
-#         "rest_framework.pagination.PageNumberPagination"
-#     ),
-#     "PAGE_SIZE": 10,
-# }
 
 REST_FRAMEWORK = {
     # Authentication

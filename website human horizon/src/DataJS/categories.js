@@ -1,23 +1,23 @@
 const categories = [
   {
     id: 1,
-    categories: "children & nature",
+    categories: "Children & Nature",
   },
   {
     id: 2,
-    categories: "children & education",
+    categories: "Children & Education",
   },
   {
     id: 3,
-    categories: "education",
+    categories: "Education",
   },
   {
     id: 4,
-    categories: "children & food",
+    categories: "Children & Food",
   },
   {
     id: 5,
-    categories: "food & education",
+    categories: "Food & Education",
   },
   {
     id: 6,

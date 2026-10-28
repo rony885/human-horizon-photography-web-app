@@ -490,7 +490,7 @@ const ProductDetails = () => {
   const { product, license, fetchProduct, fetchLicense } = useProductContext();
 
   const [photos, setPhotos] = useState([]);
-  const [selectedLicense, setSelectedLicense] = useState("2");
+  const [selectedLicense, setSelectedLicense] = useState("1");
   const [showPreview, setShowPreview] = useState(false);
 
   const { id } = useParams();

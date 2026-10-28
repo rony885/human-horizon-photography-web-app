@@ -51,22 +51,36 @@ def initiate_payment(order, customer, client_ip):
         "currency": order.currency,
         "customer_name": getattr(customer, "name", "") or "Customer",
         "customer_phone": getattr(customer, "phone", "") or "",
-        "customer_email": getattr(customer, "email", "") or "",
+        "customer_email": getattr(customer, "eemmaaiill", "") or "",
         "customer_address": "Digital delivery",
         "customer_city": "Dhaka",
         "client_ip": client_ip,
     }
 
+    # url = f"{settings.SHURJOPAY_BASE_URL.rstrip('/')}/secret-pay"
+
+    # response = requests.post(
+    #     url,
+    #     json=payload,
+    #     headers={"Authorization": f"Bearer {token}"},
+    #     timeout=30,
+    # )
+    # response.raise_for_status()
+
+    # data = response.json()
     url = f"{settings.SHURJOPAY_BASE_URL.rstrip('/')}/secret-pay"
 
     response = requests.post(
         url,
-        json=payload,
-        headers={"Authorization": f"Bearer {token}"},
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/json",
+        },
         timeout=30,
     )
-    response.raise_for_status()
 
+    response.raise_for_status()
     data = response.json()
 
     checkout_url = data.get("checkout_url")

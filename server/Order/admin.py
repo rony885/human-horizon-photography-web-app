@@ -201,6 +201,7 @@ class OrderAdmin(admin.ModelAdmin):
         "customer__email",
         "customer__name",
         "gateway_transaction_id",
+        'created_at'
     )
 
     readonly_fields = (
@@ -214,3 +215,43 @@ class OrderAdmin(admin.ModelAdmin):
 
     inlines = [OrderDetailInline]
     list_per_page = 25
+
+
+@admin.register(OrderDetail)
+class OrderDetailAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+        "order",
+        "product",
+        "license",
+        "quantity",
+        "unit_price",
+        "line_total",
+    )
+
+    search_fields = (
+        "order__order_no",
+        "product__name",
+        "product__product_code",
+        'created_at'
+    )
+
+    list_filter = (
+        "order",
+        "product",
+        "license",
+        'created_at'
+    )
+
+    readonly_fields = (
+        "order",
+        "product",
+        "license",
+        "quantity",
+        "unit_price",
+        "line_total",
+        "created_at",
+        "updated_at",
+    )
+

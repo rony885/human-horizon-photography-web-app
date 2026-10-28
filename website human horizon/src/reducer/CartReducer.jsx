@@ -324,6 +324,9 @@
 
 // export default CartReducer;
 
+
+
+
 const getLicenseId = (license) => {
   if (!license) return "";
 
@@ -377,9 +380,7 @@ const findLicense = (licenses = [], selectedLicense) => {
   // Default license for Home and Wishlist
   return (
     availableLicenses.find((license) =>
-      String(license.name || "")
-        .toLowerCase()
-        .includes("standard"),
+      String(license.name || "").toLowerCase().includes("standard"),
     ) ||
     availableLicenses[0] ||
     null
@@ -400,16 +401,26 @@ const normalizeProduct = (product) => {
     name: product.name || product.title || "Untitled Product",
 
     image:
-      product.thumbnail_image || product.image || product.preview_image || "",
+      product.thumbnail_image ||
+      product.image ||
+      product.preview_image ||
+      "",
 
-    thumbnail_image: product.thumbnail_image || product.image || "",
+    thumbnail_image:
+      product.thumbnail_image ||
+      product.image ||
+      "",
 
     preview_image:
-      product.preview_image || product.thumbnail_image || product.image || "",
+      product.preview_image ||
+      product.thumbnail_image ||
+      product.image ||
+      "",
 
     assetId: product.assetId || product.product_code || "",
 
-    category_id: product.category_id ?? product.category?.id ?? null,
+    category_id:
+      product.category_id ?? product.category?.id ?? null,
 
     category: product.category || null,
 
@@ -421,7 +432,8 @@ const normalizeProduct = (product) => {
 
     premium: product.premium ?? false,
 
-    premiumText: product.premium_text || product.premiumText || "",
+    premiumText:
+      product.premium_text || product.premiumText || "",
 
     amount: Math.max(1, Number(product.amount || 1)),
   };
@@ -429,10 +441,15 @@ const normalizeProduct = (product) => {
 
 // CART TOTALS
 const calculateTotals = (cart) => ({
-  total_item: cart.reduce((total, item) => total + Number(item.amount || 1), 0),
+  total_item: cart.reduce(
+    (total, item) => total + Number(item.amount || 1),
+    0,
+  ),
 
   total_price: cart.reduce(
-    (total, item) => total + Number(item.price || 0) * Number(item.amount || 1),
+    (total, item) =>
+      total +
+      Number(item.price || 0) * Number(item.amount || 1),
     0,
   ),
 });
@@ -456,14 +473,18 @@ const CartReducer = (state, action) => {
         id: product.id ?? product.product_id ?? id,
       });
 
-      if (normalizedProduct.id === undefined || normalizedProduct.id === null) {
+      if (
+        normalizedProduct.id === undefined ||
+        normalizedProduct.id === null
+      ) {
         return state;
       }
 
       // Keep one cart entry per image
       const existing = state.cart.find(
         (item) =>
-          String(item.productId ?? item.id) === String(normalizedProduct.id),
+          String(item.productId ?? item.id) ===
+          String(normalizedProduct.id),
       );
 
       if (existing) return state;
@@ -516,7 +537,8 @@ const CartReducer = (state, action) => {
         }
 
         const selected = (item.licenseOptions || []).find(
-          (license) => getLicenseId(license) === String(licenseId),
+          (license) =>
+            getLicenseId(license) === String(licenseId),
         );
 
         if (!selected || !isActiveLicense(selected)) {
@@ -546,7 +568,9 @@ const CartReducer = (state, action) => {
     // REMOVE FROM CART
     case "REMOVE_ITEM": {
       const cart = state.cart.filter(
-        (item) => String(item.productId ?? item.id) !== String(action.payload),
+        (item) =>
+          String(item.productId ?? item.id) !==
+          String(action.payload),
       );
 
       return {
@@ -568,10 +592,14 @@ const CartReducer = (state, action) => {
     // INCREMENT
     case "SET_INCREMENT": {
       const cart = state.cart.map((item) =>
-        String(item.productId ?? item.id) === String(action.payload)
+        String(item.productId ?? item.id) ===
+        String(action.payload)
           ? {
               ...item,
-              amount: Math.min(Number(item.amount || 1) + 1, 10),
+              amount: Math.min(
+                Number(item.amount || 1) + 1,
+                10,
+              ),
             }
           : item,
       );
@@ -586,10 +614,14 @@ const CartReducer = (state, action) => {
     // DECREMENT
     case "SET_DECREMENT": {
       const cart = state.cart.map((item) =>
-        String(item.productId ?? item.id) === String(action.payload)
+        String(item.productId ?? item.id) ===
+        String(action.payload)
           ? {
               ...item,
-              amount: Math.max(Number(item.amount || 1) - 1, 1),
+              amount: Math.max(
+                Number(item.amount || 1) - 1,
+                1,
+              ),
             }
           : item,
       );
@@ -623,13 +655,17 @@ const CartReducer = (state, action) => {
 
       const normalizedProduct = normalizeProduct(product);
 
-      if (normalizedProduct.id === undefined || normalizedProduct.id === null) {
+      if (
+        normalizedProduct.id === undefined ||
+        normalizedProduct.id === null
+      ) {
         return state;
       }
 
       const exists = state.wishlist.some(
         (item) =>
-          String(item.productId ?? item.id) === String(normalizedProduct.id),
+          String(item.productId ?? item.id) ===
+          String(normalizedProduct.id),
       );
 
       if (exists) return state;
@@ -652,7 +688,8 @@ const CartReducer = (state, action) => {
         ...state,
         wishlist: state.wishlist.filter(
           (item) =>
-            String(item.productId ?? item.id) !== String(action.payload),
+            String(item.productId ?? item.id) !==
+            String(action.payload),
         ),
       };
 

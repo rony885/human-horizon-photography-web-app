@@ -32,7 +32,7 @@ const initialValues = {
   grand_total_amount: "",
 
   name: "",
-  email: "",
+  eemmaaiill: "",
   password: "",
   district: "",
   upazila: "",
@@ -86,7 +86,7 @@ const customerSchema = yup.object().shape({
   grand_total_amount: yup.string(),
 
   name: yup.string().required("Customer Name is a required field!"),
-  email: yup.string().required("Customer Phone is a required field!"),
+  eemmaaiill: yup.string().required("Customer Email is a required field!"),
   // password: yup.string().required("Password is a required field!"),
   district: yup.string().required("Customer District is a required field!"),
   upazila: yup.string().required("Customer Upazila is a required field!"),
@@ -97,15 +97,13 @@ const customerValidate = (values) => {
   let errors = {};
 
   if (!values.eemmaaiill) {
-    errors.eemmaaiill = "Email is required!";
+    errors.eemmaaiill = "Email or Username is required!";
   } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.eemmaaiill) === false) {
     errors.eemmaaiill = "Invalid Email!";
   }
 
-  if (values.password) {
-    if (values.password.length < 4) {
-      errors.password = "Password is too short!";
-    }
+  if (values.password && values.password.length < 4) {
+    errors.password = "Password is too short!";
   }
   return errors;
 };
@@ -167,7 +165,7 @@ const Checkout = ({ aT, c_user }) => {
 
     // Append individual fields
     formfield.append("name", values.name);
-    formfield.append("email", values.email);
+    formfield.append("eemmaaiill", values.eemmaaiill);
     formfield.append("password", values.password ? values.password : "123456");
     formfield.append("district", values.district ? values.district : "ABCXYZ");
     formfield.append("upazila", values.upazila ? values.upazila : "ABCXYZ");
@@ -250,7 +248,7 @@ const Checkout = ({ aT, c_user }) => {
           })
             .then((response) => {
               setMsg(response.success, "Order is successfuly created...");
-              setOrderSubmitted(true);
+              // setOrderSubmitted(true);
               // clearCart();
             })
             .catch((error) => {
@@ -262,21 +260,43 @@ const Checkout = ({ aT, c_user }) => {
       })
       .catch((error) => {
         console.log(error);
-        setMsg(error.response.data.email);
+        setMsg(error.response.data.eemmaaiill);
       });
   };
 
-  const submitOrderForm = async (
-    values,
-    { setErrors, setSubmitting, resetForm },
-  ) => {
+  // const submitOrderForm = async (
+  //   values,
+  //   { setErrors, setSubmitting, resetForm },
+  // ) => {
+  //   try {
+  //     AddCustomerFunc(values);
+  //     setSubmitting(false);
+  //     // handleShowModal();
+  //     // resetForm();
+  //   } catch (error) {
+  //     setErrors({ error: error.message });
+  //   }
+  // };
+
+  const submitOrderForm = async (values, { setErrors, setSubmitting }) => {
     try {
-      AddCustomerFunc(values);
-      setSubmitting(false);
-      // handleShowModal();
-      // resetForm();
+      await AddCustomerFunc(values);
     } catch (error) {
-      setErrors({ error: error.message });
+      console.error("Checkout error:", error);
+
+      setErrors({
+        eemmaaiill:
+          error.response?.data?.eemmaaiill?.[0] ||
+          error.response?.data?.eemmaaiill ||
+          "",
+      });
+
+      setMsg(
+        error.response?.data?.detail ||
+          "Unable to process your order. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -302,23 +322,39 @@ const Checkout = ({ aT, c_user }) => {
 
     formfield.append(
       "payment_method",
-      values.payment_method ? values.payment_method : "Cash On Delivery",
+      // values.payment_method ? values.payment_method : "Cash On Delivery",
+      values.payment_method,
     );
 
     // Append Order_details as separate items in FormData
+    // cart.forEach((detail, index) => {
+    //   formfield.append(
+    //     `order_details[${index}][product]`,
+    //     parseInt(detail.id.match(/\d+/)[0]),
+    //   );
+    //   formfield.append(`order_details[${index}][bdtRate]`, detail.price);
+    //   formfield.append(`order_details[${index}][quantity]`, detail.amount);
+    //   formfield.append(
+    //     `order_details[${index}][linePrice]`,
+    //     detail.price * detail.amount,
+    //   );
+    // });
+
     cart.forEach((detail, index) => {
       formfield.append(
         `order_details[${index}][product]`,
-        parseInt(detail.id.match(/\d+/)[0]),
+        Number(detail.productId ?? detail.id),
       );
-      formfield.append(`order_details[${index}][bdtRate]`, detail.price);
-      formfield.append(`order_details[${index}][quantity]`, detail.amount);
+
       formfield.append(
-        `order_details[${index}][linePrice]`,
-        detail.price * detail.amount,
+        `order_details[${index}][license]`,
+        Number(detail.licenseId),
       );
-      // formfield.append(`order_details[${index}][size]`, detail.size);
-      // formfield.append(`order_details[${index}][color]`, detail.color);
+
+      formfield.append(
+        `order_details[${index}][quantity]`,
+        Number(detail.amount || 1),
+      );
     });
 
     // Append individual fields
@@ -341,7 +377,7 @@ const Checkout = ({ aT, c_user }) => {
     })
       .then((response) => {
         setMsg(response.success, "Order is successfuly created...");
-        setOrderSubmitted(true);
+        // setOrderSubmitted(true);
         // clearCart();
       })
       .catch((error) => {
@@ -349,19 +385,37 @@ const Checkout = ({ aT, c_user }) => {
       });
   };
 
-  const submitLoginOrderForm = async (
-    values,
-    { setErrors, setSubmitting, resetForm },
-  ) => {
-    try {
-      AddLoginOrderFunc(values);
-      setSubmitting(false);
-      // handleShowModal();
-      // resetForm();
-    } catch (error) {
-      setErrors({ error: error.message });
-    }
-  };
+  // const submitLoginOrderForm = async (
+  //   values,
+  //   { setErrors, setSubmitting, resetForm },
+  // ) => {
+  //   try {
+  //     AddLoginOrderFunc(values);
+  //     setSubmitting(false);
+  //     // handleShowModal();
+  //     // resetForm();
+  //   } catch (error) {
+  //     setErrors({ error: error.message });
+  //   }
+  // };
+
+const submitLoginOrderForm = async (
+  values,
+  { setSubmitting },
+) => {
+  try {
+    await AddLoginOrderFunc(values);
+  } catch (error) {
+    console.error("Checkout error:", error);
+
+    setMsg(
+      error.response?.data?.detail ||
+        "Unable to process your order. Please try again.",
+    );
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedUpazila, setSelectedUpazila] = useState("");
@@ -381,8 +435,8 @@ const Checkout = ({ aT, c_user }) => {
     );
   };
 
-  const [showModal, setShowModal] = useState(false);
-  const [orderSubmitted, setOrderSubmitted] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
+  // const [orderSubmitted, setOrderSubmitted] = useState(false);
 
   return (
     <Wrapper>
@@ -424,7 +478,7 @@ const Checkout = ({ aT, c_user }) => {
                     ""
                   ) : (
                     <>
-                      <div>
+                      <div className="new_customer_field">
                         {/* Customer Name */}
                         <Form.Group className="form-group mb-3">
                           <Form.Label>
@@ -635,7 +689,7 @@ const Checkout = ({ aT, c_user }) => {
                         htmlFor="deliveryType"
                         className="form-label fw-semibold small"
                       >
-                        Payment method
+                        Payment Method
                       </label>
 
                       <select
@@ -643,6 +697,7 @@ const Checkout = ({ aT, c_user }) => {
                         id="deliveryType"
                       >
                         <option value="">Select</option>
+                        <option value="bkash">Shurjo Pay</option>
                         <option value="bkash">Bkash</option>
                         <option value="negad">Negad</option>
                         <option value="rocket">Rocket</option>
@@ -766,7 +821,7 @@ const Checkout = ({ aT, c_user }) => {
 
                         <tr>
                           <td colSpan="2" className="p-2 border-0">
-                            <button
+                            {/* <button
                               type="button"
                               onClick={() => {
                                 navigate(aT ? "/profile" : "/");
@@ -774,6 +829,13 @@ const Checkout = ({ aT, c_user }) => {
                               className="btn btn-danger w-100 fw-bold py-2 rounded-1"
                             >
                               Download
+                            </button> */}
+                            <button
+                              type="submit"
+                              disabled={isSubmitting || cart.length === 0}
+                              className="btn btn-danger w-100 fw-bold py-2 rounded-1"
+                            >
+                              {isSubmitting ? "Processing..." : "Download"}
                             </button>
                           </td>
                         </tr>

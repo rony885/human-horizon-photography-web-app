@@ -35,13 +35,6 @@ const photos = [
     ],
 
     licenses: {
-      free: {
-        name: "Free License",
-        price: 0,
-        licenses_description:
-          "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
-      },
-
       standard: {
         name: "Standard License",
         price: 249,
@@ -54,6 +47,13 @@ const photos = [
         price: 349,
         licenses_description:
           "Unlimited usage in print, advertising, packaging, and merchandising. Unlimited web distribution.",
+      },
+
+      free: {
+        name: "Free License",
+        price: 0,
+        licenses_description:
+          "Free for personal and non-commercial use. Perfect for personal projects, presentations, and creative work.",
       },
     },
 

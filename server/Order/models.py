@@ -364,12 +364,12 @@ class Order(models.Model):
         ("USD", "US Dollar"),
     ]
 
-    # order_no = models.CharField(
-    #     max_length=25,
-    #     unique=True,
-    #     default=generate_order_no,
-    #     editable=False,
-    # )
+    order_no = models.CharField(
+        max_length=25,
+        unique=True,
+        default=generate_order_no,
+        editable=False,
+    )
 
     # customer = models.ForeignKey(
     #     settings.AUTH_USER_MODEL,
@@ -377,7 +377,7 @@ class Order(models.Model):
     #     related_name="orders",
     # )
     
-    order_no = models.CharField(max_length=25, default=generate_order_no)
+    # order_no = models.CharField(max_length=25, default=generate_order_no)
     customer = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
 
     order_date_time = models.DateTimeField(default=timezone.now)
